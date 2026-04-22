@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "portal-fix-outcome-rules",
+  "run_type": "without_skill",
+  "expectations": [
+    {"text": "identifies-pr-diff", "passed": true, "evidence": "References both changed files and lists specific lines"},
+    {"text": "checks-docstrings-in-changed-files", "passed": true, "evidence": "Examines JSDoc on OutcomeRulesContextValue, RestoreLiveModal props JSDoc, inline comments"},
+    {"text": "searches-beyond-diff", "passed": true, "evidence": "Checked RestoreLiveModal.tsx, scriptManagerTypes.ts, useScriptPersistence.ts, test files, node_modules for docs"},
+    {"text": "categorizes-by-severity", "passed": false, "evidence": "Uses ad-hoc Low/Medium/N/A scheme instead of structured severity categories. No summary table with clear grouping."},
+    {"text": "provides-concrete-fixes", "passed": true, "evidence": "proposed-fixes.md has actual diff hunks for JSDoc, modal text, changedSections, scriptManagerTypes, useScriptPersistence"},
+    {"text": "no-false-positives", "passed": true, "evidence": "Correctly identifies existing convention gaps, marks inline comment as 'No issue', notes no markdown docs exist"},
+    {"text": "covers-multiple-doc-types", "passed": true, "evidence": "Checks JSDoc, inline comments, props JSDoc, markdown, test docstrings"}
+  ]
+}

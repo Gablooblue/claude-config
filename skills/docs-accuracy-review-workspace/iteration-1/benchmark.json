@@ -1,0 +1,102 @@
+{
+  "skill_name": "docs-accuracy-review",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill",
+      "results": [
+        {
+          "eval_id": 0,
+          "eval_name": "portal-fix-outcome-rules",
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "pass_rate": 1.0,
+          "total_tokens": 94532,
+          "duration_seconds": 141.6
+        },
+        {
+          "eval_id": 1,
+          "eval_name": "core-schedule-next-call",
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "pass_rate": 1.0,
+          "total_tokens": 83774,
+          "duration_seconds": 133.8
+        },
+        {
+          "eval_id": 2,
+          "eval_name": "api-warm-transfer-webhook",
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "pass_rate": 1.0,
+          "total_tokens": 105196,
+          "duration_seconds": 203.5
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 1.0,
+        "stddev_pass_rate": 0.0,
+        "mean_tokens": 94500.7,
+        "stddev_tokens": 8756.3,
+        "mean_duration_seconds": 159.6,
+        "stddev_duration_seconds": 31.1
+      }
+    },
+    {
+      "name": "without_skill",
+      "label": "Baseline (No Skill)",
+      "results": [
+        {
+          "eval_id": 0,
+          "eval_name": "portal-fix-outcome-rules",
+          "assertions_passed": 6,
+          "assertions_total": 7,
+          "pass_rate": 0.857,
+          "total_tokens": 93501,
+          "duration_seconds": 141.4
+        },
+        {
+          "eval_id": 1,
+          "eval_name": "core-schedule-next-call",
+          "assertions_passed": 6,
+          "assertions_total": 7,
+          "pass_rate": 0.857,
+          "total_tokens": 81735,
+          "duration_seconds": 146.6
+        },
+        {
+          "eval_id": 2,
+          "eval_name": "api-warm-transfer-webhook",
+          "assertions_passed": 6,
+          "assertions_total": 7,
+          "pass_rate": 0.857,
+          "total_tokens": 99449,
+          "duration_seconds": 172.4
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 0.857,
+        "stddev_pass_rate": 0.0,
+        "mean_tokens": 91561.7,
+        "stddev_tokens": 7336.7,
+        "mean_duration_seconds": 153.5,
+        "stddev_duration_seconds": 13.7
+      }
+    }
+  ],
+  "delta": {
+    "pass_rate": "+14.3%",
+    "tokens": "+3.2%",
+    "duration": "+4.0%"
+  },
+  "analyst_observations": [
+    "The only assertion the baseline consistently fails is 'categorizes-by-severity' — all 3 baseline runs used ad-hoc Medium/Low/Info schemes instead of the structured Critical/Stale/Missing categories the skill teaches.",
+    "Both configurations perform equally well on the other 6 assertions, suggesting the baseline model is already capable of thorough doc review — the skill's main value-add is in structuring the output consistently.",
+    "The with-skill version caught the return type mismatch (datetime vs NextContactSchedulerResponse) in eval 1 at Critical severity, while the baseline rated the same issue as Medium. This severity calibration difference could matter for triage.",
+    "The baseline for eval 0 actually found an additional valid issue (scriptManagerTypes.ts naming ambiguity) that the with-skill version marked as 'no issue'. The skill may be slightly more conservative about flagging edge cases.",
+    "Token usage is comparable (~3% more with skill), so the skill doesn't cause significant cost overhead.",
+    "The with-skill version for eval 2 caught a merge conflict risk (S1) that the baseline also caught — both identified this independently, suggesting it's a strong signal in the code rather than a skill-specific insight.",
+    "Non-discriminating assertions: 6 of 7 assertions pass regardless of skill presence. The skill's quantitative advantage is narrow (1 assertion), suggesting the value is more about consistency and calibration than fundamentally different analysis."
+  ]
+}

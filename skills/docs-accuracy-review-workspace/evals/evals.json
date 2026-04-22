@@ -1,0 +1,26 @@
+{
+  "skill_name": "docs-accuracy-review",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I just opened PR #366 on onprofit-portal (fix(ON-2078): restore outcome rules alongside scripts). Can you check if all the docs and docstrings are still accurate after these changes?",
+      "expected_output": "Should identify any stale docstrings, README references, or inline comments that no longer match the code changes in the PR. Should fix any issues found.",
+      "files": [],
+      "working_directory": "/Users/gab/Work/onprofit-portal"
+    },
+    {
+      "id": 1,
+      "prompt": "Review the docs accuracy for PR #310 on onprofit-core (feat(ON-2043): Schedule next call relative to last user message). Make sure all docstrings and markdown docs still match the code.",
+      "expected_output": "Should analyze the feature PR, find any docstrings with wrong parameter descriptions, outdated README sections, or missing docs for new public functions. Should fix issues found.",
+      "files": [],
+      "working_directory": "/Users/gab/Work/onprofit-core"
+    },
+    {
+      "id": 2,
+      "prompt": "Check if the documentation is still correct in PR #321 on onprofit-services-api (feat(ON-1413): Add warm transfer data to post-call webhook payload). I want to make sure the API docs and docstrings match the new webhook payload.",
+      "expected_output": "Should find any OpenAPI/Swagger spec mismatches, docstrings with outdated parameter/return descriptions, and README sections describing the webhook payload that need updating. Should fix issues.",
+      "files": [],
+      "working_directory": "/Users/gab/Work/onprofit-services-api"
+    }
+  ]
+}

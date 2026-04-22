@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "api-warm-transfer-webhook",
+  "run_type": "with_skill",
+  "expectations": [
+    {"text": "identifies-pr-diff", "passed": true, "evidence": "Lists all changed files, references specific schema classes, line numbers"},
+    {"text": "checks-docstrings-in-changed-files", "passed": true, "evidence": "Detailed field-level audit of all Pydantic field descriptions, from_warm_transfer docstring, from_call docstring"},
+    {"text": "searches-beyond-diff", "passed": true, "evidence": "Checked webhook-integration-guide.md, webhook-examples.md, lead_webhook.py call site, ORM model fields, PR description"},
+    {"text": "categorizes-by-severity", "passed": true, "evidence": "Uses Critical/Stale/Missing with clear S1/M1/M2/M3 identifiers and severity labels"},
+    {"text": "provides-concrete-fixes", "passed": true, "evidence": "proposed-fixes.md has diff hunks for from_warm_transfer docstring, from_call docstring, status field description, and rebase guidance"},
+    {"text": "no-false-positives", "passed": true, "evidence": "Correctly verifies all Pydantic field descriptions are accurate, marks code flow as correct"},
+    {"text": "covers-multiple-doc-types", "passed": true, "evidence": "Checks Pydantic field descriptions, docstrings, markdown webhook docs, ORM model coverage, inline comments"}
+  ]
+}

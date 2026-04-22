@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "core-schedule-next-call",
+  "run_type": "with_skill",
+  "expectations": [
+    {"text": "identifies-pr-diff", "passed": true, "evidence": "Lists all 4 changed files, references specific line numbers in core.py and post_call.py"},
+    {"text": "checks-docstrings-in-changed-files", "passed": true, "evidence": "Audits schedule_next_contact docstring, _cadence_next_contact_at docstring, get_last_user_message_at docstring, execute inline comments"},
+    {"text": "searches-beyond-diff", "passed": true, "evidence": "Searched markdown docs, OpenAPI specs, analysis_orchestrator.py for references to changed methods"},
+    {"text": "categorizes-by-severity", "passed": true, "evidence": "Uses Critical/Stale/Missing/N/A with clear summary table: 2 Critical, 1 Stale"},
+    {"text": "provides-concrete-fixes", "passed": true, "evidence": "proposed-fixes.md has exact diff hunks for both docstrings including corrected return type and anchor_time description"},
+    {"text": "no-false-positives", "passed": true, "evidence": "Correctly marks get_last_user_message_at as adequate, execute comments as correctly updated, no false flags"},
+    {"text": "covers-multiple-doc-types", "passed": true, "evidence": "Checks docstrings, inline comments, markdown docs, OpenAPI specs"}
+  ]
+}
