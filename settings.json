@@ -1,0 +1,68 @@
+{
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Read(//Users/gab/Work/onprofit-services-api/**)",
+      "Read(//Users/gab/Work/analytics/**)",
+      "Bash(./mvnw test:*)",
+      "Bash(xargs cat:*)",
+      "Bash(~/.pr-agent/venv/bin/python -m pr_agent.cli:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(/Users/gab/.claude/plugins/marketplaces/claude-plugins-official/plugins/ralph-loop/scripts/:*)",
+      "Bash(\"/Users/gab/.claude/plugins/marketplaces/claude-plugins-official/plugins/ralph-loop/scripts/:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/gab/Work/analytics/src/analytics/sources",
+      "/Users/gab/Work/analytics/src/analytics/evaluators",
+      "/Users/gab/Work/analytics/src/analytics/sinks",
+      "/Users/gab/Work/analytics/src/analytics/core",
+      "/Users/gab/Work/analytics/src/analytics/pipeline",
+      "/Users/gab/Work/analytics/src/analytics/config"
+    ]
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers@superpowers-marketplace": true,
+    "episodic-memory@superpowers-marketplace": false,
+    "double-shot-latte@superpowers-marketplace": true,
+    "elements-of-style@superpowers-marketplace": true,
+    "atlassian@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "agent-md-refactor@agent-toolkit": true,
+    "skill-judge@agent-toolkit": true,
+    "dependency-updater@agent-toolkit": true,
+    "lesson-learned@agent-toolkit": true,
+    "requirements-clarity@agent-toolkit": true,
+    "datadog-cli@agent-toolkit": true,
+    "humanizer@agent-toolkit": true,
+    "op@onprofit-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "onprofit-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "onprofit/op-claude-marketplace"
+      },
+      "autoUpdate": true
+    },
+    "agent-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "softaworks/agent-toolkit"
+      },
+      "autoUpdate": true
+    }
+  },
+  "effortLevel": "high"
+}

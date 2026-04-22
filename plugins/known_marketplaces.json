@@ -1,0 +1,37 @@
+{
+  "superpowers-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "obra/superpowers-marketplace"
+    },
+    "installLocation": "/Users/gab/.claude/plugins/marketplaces/superpowers-marketplace",
+    "lastUpdated": "2026-04-21T14:06:56.528Z",
+    "autoUpdate": true
+  },
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "/Users/gab/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-04-21T14:06:56.584Z"
+  },
+  "onprofit-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "onprofit/op-claude-marketplace"
+    },
+    "installLocation": "/Users/gab/.claude/plugins/marketplaces/onprofit-marketplace",
+    "lastUpdated": "2026-04-21T13:57:53.893Z",
+    "autoUpdate": true
+  },
+  "agent-toolkit": {
+    "source": {
+      "source": "github",
+      "repo": "softaworks/agent-toolkit"
+    },
+    "installLocation": "/Users/gab/.claude/plugins/marketplaces/agent-toolkit",
+    "lastUpdated": "2026-04-21T13:57:55.321Z",
+    "autoUpdate": true
+  }
+}

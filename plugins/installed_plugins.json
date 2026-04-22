@@ -1,0 +1,184 @@
+{
+  "version": 2,
+  "plugins": {
+    "pyright-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-02T21:07:17.428Z",
+        "lastUpdated": "2026-03-02T21:07:17.428Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "jdtls-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/jdtls-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-02T21:07:21.708Z",
+        "lastUpdated": "2026-03-02T21:07:21.708Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "typescript-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/typescript-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-02T21:07:27.461Z",
+        "lastUpdated": "2026-03-02T21:07:27.461Z",
+        "gitCommitSha": "55b58ec6e5649104f926ba7558b567dc8d33c5ff"
+      }
+    ],
+    "superpowers@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/superpowers-marketplace/superpowers/5.0.7",
+        "version": "5.0.7",
+        "installedAt": "2026-03-02T21:08:28.486Z",
+        "lastUpdated": "2026-04-14T16:24:04.429Z",
+        "gitCommitSha": "e4a2375cb705ca5800f0833528ce36a3faf9017a"
+      }
+    ],
+    "episodic-memory@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/superpowers-marketplace/episodic-memory/1.0.15",
+        "version": "1.0.15",
+        "installedAt": "2026-03-02T21:09:36.554Z",
+        "lastUpdated": "2026-03-02T21:09:36.554Z",
+        "gitCommitSha": "6feaa5bd8752ae104c88d251e68ce19c30a1bd2f"
+      }
+    ],
+    "double-shot-latte@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/superpowers-marketplace/double-shot-latte/1.2.0",
+        "version": "1.2.0",
+        "installedAt": "2026-03-16T17:09:38.660Z",
+        "lastUpdated": "2026-03-16T17:09:38.660Z",
+        "gitCommitSha": "dfe756798327554783e77758d9d50d44b4308bbf"
+      }
+    ],
+    "elements-of-style@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/superpowers-marketplace/elements-of-style/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-01T17:01:20.294Z",
+        "lastUpdated": "2026-04-01T17:01:20.294Z",
+        "gitCommitSha": "6099c505c2a8eb066f3777f83a97d9d828f7954c"
+      }
+    ],
+    "atlassian@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/atlassian/9b52fb18e184",
+        "version": "9b52fb18e184",
+        "installedAt": "2026-04-01T17:15:51.896Z",
+        "lastUpdated": "2026-04-15T14:33:35.230Z",
+        "gitCommitSha": "385c1469c567399970e1d3fc23687a0312aa63dc"
+      }
+    ],
+    "ralph-loop@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/ralph-loop/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-01T17:51:26.009Z",
+        "lastUpdated": "2026-04-01T17:51:26.009Z"
+      }
+    ],
+    "pr-review-toolkit@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/unknown",
+        "version": "unknown",
+        "installedAt": "2026-04-01T19:18:53.600Z",
+        "lastUpdated": "2026-04-15T19:05:41.843Z",
+        "gitCommitSha": "b091cb4179d3b62a6e2a39910461c7ec7165b1ef"
+      }
+    ],
+    "agent-md-refactor@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/agent-md-refactor/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T15:59:58.486Z",
+        "lastUpdated": "2026-04-02T15:59:58.486Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "skill-judge@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/skill-judge/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:00:46.806Z",
+        "lastUpdated": "2026-04-02T16:00:46.806Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "dependency-updater@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/dependency-updater/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:02:18.265Z",
+        "lastUpdated": "2026-04-02T16:02:18.265Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "lesson-learned@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/lesson-learned/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:02:42.487Z",
+        "lastUpdated": "2026-04-02T16:02:42.487Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "requirements-clarity@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/requirements-clarity/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:03:10.207Z",
+        "lastUpdated": "2026-04-02T16:03:10.207Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "datadog-cli@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/datadog-cli/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:03:25.696Z",
+        "lastUpdated": "2026-04-02T16:03:25.696Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "humanizer@agent-toolkit": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/agent-toolkit/humanizer/3027f20f3181",
+        "version": "3027f20f3181",
+        "installedAt": "2026-04-02T16:04:08.771Z",
+        "lastUpdated": "2026-04-02T16:04:08.771Z",
+        "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
+      }
+    ],
+    "op@onprofit-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gab/.claude/plugins/cache/onprofit-marketplace/op/1.11.0",
+        "version": "1.11.0",
+        "installedAt": "2026-04-09T21:30:52.041Z",
+        "lastUpdated": "2026-04-14T16:26:33.414Z",
+        "gitCommitSha": "0a662100d7d7aa98a5eec46d750384d64a1eb211"
+      }
+    ]
+  }
+}
