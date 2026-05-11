@@ -94,14 +94,13 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 
 # Commits
 
-- Follow conventional commit format with ticket number: `fix(ON-1234): Prevent bug from happening`
+- Follow conventional commit format with ticket number: `fix(ABC-1234): Prevent bug from happening`
 - NEVER make a PR without a ticket number in the title
 - NEVER push plan files into the git repo.
 
 # Jira Tickets
 
 - If no ticket number exists for the current task, create one via the Jira MCP tools.
-- Assign to glopez@onprofit.ai (Gab Lopez).
 - Move the ticket to the board and set status to "In Progress" or "PR Review" as appropriate.
 
 # PR Reviews — Leaving

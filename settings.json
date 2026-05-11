@@ -4,7 +4,6 @@
   },
   "permissions": {
     "allow": [
-      "Read(//Users/gab/Work/onprofit-services-api/**)",
       "Read(//Users/gab/Work/analytics/**)",
       "Bash(./mvnw test:*)",
       "Bash(xargs cat:*)",
