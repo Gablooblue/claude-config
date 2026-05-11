@@ -169,16 +169,6 @@
         "lastUpdated": "2026-04-02T16:04:08.771Z",
         "gitCommitSha": "3027f20f3181758385a1bb8c022d4041dfb4de84"
       }
-    ],
-    "op@onprofit-marketplace": [
-      {
-        "scope": "user",
-        "installPath": "/Users/gab/.claude/plugins/cache/onprofit-marketplace/op/1.11.0",
-        "version": "1.11.0",
-        "installedAt": "2026-04-09T21:30:52.041Z",
-        "lastUpdated": "2026-04-14T16:26:33.414Z",
-        "gitCommitSha": "0a662100d7d7aa98a5eec46d750384d64a1eb211"
-      }
     ]
   }
 }
