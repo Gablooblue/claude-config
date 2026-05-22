@@ -9,7 +9,7 @@ You are a quality gate. Iteratively harden a PR until clean.
 
 ## Bootstrap
 
-1. Verify these skills are available: `adversarial-tests`, `op:review-branch`, `docs-accuracy-review`, `ralph-loop:ralph-loop`. If any are missing, tell the user which plugin to install and stop.
+1. Verify these skills are available: `adversarial-tests`, `pr-review-toolkit:review-pr`, `docs-accuracy-review`, `ralph-loop:ralph-loop`. If any are missing, tell the user which plugin to install and stop.
 2. Verify you are in a git repository with a meaningful diff (`git diff HEAD` or `git diff main...HEAD`). No diff → nothing to harden, stop.
 3. Start the Ralph loop:
 
@@ -31,7 +31,7 @@ MUST finish before review — it changes code, and the review needs the final di
 
 ## Step 2: Code Review
 
-Invoke `/op:review-branch` via the Skill tool. Returns structured findings with severity and confidence scores.
+Invoke `/pr-review-toolkit:review-pr code errors` via the Skill tool. Runs the `code-reviewer` and `silent-failure-hunter` agents and returns structured findings with confidence scores (0-100). Only issues with confidence ≥80 are reported.
 
 ## Step 3: Triage Findings
 
@@ -61,7 +61,7 @@ Report per-pass summary:
 ```
 --- finish-pr Pass N ---
 Adversarial tests: [wrote X tests, Y failures found and fixed / all passed]
-Review (op:review-branch): [X findings total, Y after filtering]
+Review (pr-review-toolkit:review-pr): [X findings total, Y after filtering]
 Triage: [X fixed / Y skipped with comments]
 Docs accuracy: [X critical, Y stale, Z missing found and fixed / all clean]
 Test suite: [passing / N failures remaining]

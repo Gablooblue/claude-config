@@ -4,7 +4,6 @@
   },
   "permissions": {
     "allow": [
-      "Read(//Users/gab/Work/onprofit-services-api/**)",
       "Read(//Users/gab/Work/analytics/**)",
       "Bash(./mvnw test:*)",
       "Bash(xargs cat:*)",
@@ -39,8 +38,7 @@
     "lesson-learned@agent-toolkit": true,
     "requirements-clarity@agent-toolkit": true,
     "datadog-cli@agent-toolkit": true,
-    "humanizer@agent-toolkit": true,
-    "op@onprofit-marketplace": true
+    "humanizer@agent-toolkit": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -49,19 +47,18 @@
         "repo": "anthropics/claude-plugins-official"
       }
     },
-    "onprofit-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "onprofit/op-claude-marketplace"
-      },
-      "autoUpdate": true
-    },
     "agent-toolkit": {
       "source": {
         "source": "github",
         "repo": "softaworks/agent-toolkit"
       },
       "autoUpdate": true
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
     }
   },
   "effortLevel": "high"
