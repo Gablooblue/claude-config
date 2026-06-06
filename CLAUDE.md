@@ -53,6 +53,18 @@ You MUST stop and get confirmation only when:
 - Before claiming work is done: run relevant tests, review your own diff for unintended changes. Report results, do not ask permission to verify.
 - NEVER use emdashes (—) in code files (source code, config, scripts). Use regular hyphens (-) or double hyphens (--) instead. Emdashes cause issues in some editors and terminals.
 
+# Concurrent Agents — Assume You Are Not Alone
+
+Multiple agents may be editing this repo at the same time. Treat any uncommitted change you did not make as another agent's in-progress work, not as garbage to clean up.
+
+- ALWAYS run `git status` and `git diff` before your first edit in a session. Know which files already have uncommitted changes before you touch anything.
+- NEVER revert, reformat, or "clean up" changes in files you did not modify this session. Unfamiliar diffs belong to another agent.
+- NEVER delete code that "looks unused" without grepping the working tree AND checking `git diff` for uncommitted references. New code from a parallel agent will look orphaned until its caller lands.
+- If your planned edit overlaps a file that already has uncommitted changes you did not make: STOP. Surface the collision and confirm before overwriting.
+- Scope edits to the files your task requires. NEVER drive-by refactor shared files — that is where collisions happen.
+- NEVER run repo-wide formatters, autofix linters, or codemods without checking `git status` first. A blanket rewrite will clobber every other agent's diff.
+- Before staging, re-run `git status` and `git diff --staged`. Stage only the files you modified. If you cannot tell who owns a change, leave it unstaged and flag it.
+
 # Anti-Patterns — Flag and REFUSE to Implement Without Discussion
 
 - God classes/functions that do too many things
@@ -91,6 +103,47 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 
 - NEVER write code without a corresponding test. Aim for near-full coverage with every commit.
 - Tests MUST verify behavior, not implementation details.
+
+# Manual Testing — MANDATORY Before PR Creation
+
+You MUST block PR creation for any feature, bug fix, or UI change until I have manually exercised the change in a running app. Tests passing is NOT sufficient — type checks and unit tests verify code correctness, not feature correctness.
+
+**Trigger**: I ask you to create a PR, push for review, run `gh pr create`, or say "ready to ship/merge/review".
+
+**Required handoff before PR — output this block, then STOP:**
+
+```
+🛑 MANUAL TEST REQUIRED before PR
+
+▶ Lowest-effort run command:
+   [exact command: `npm run dev`, `pnpm start`, single curl, single CLI invocation]
+   [URL/route/endpoint to hit, or exact input to provide]
+
+▶ Golden path (must pass):
+   1. [concrete user action]
+   2. [expected observable result]
+
+▶ Critical risks I introduced — test these explicitly:
+   - [specific edge case from THIS diff, e.g. "empty list state at /dashboard"]
+   - [regression risk: shared component/util I touched + where else it's used]
+   - [boundary: auth/permission/null/error path I changed]
+
+▶ Reply with one of:
+   "tested ✅"  → I create the PR
+   "broken: [what]" → I debug
+   "skip test" → I create the PR but log the skip in the PR description
+```
+
+**Rules for generating the block:**
+- The run command MUST be the single shortest path to exercise THIS change. If the app has a dev server already implied, just give the route. If it's a pure function, give a one-line REPL/curl invocation. NEVER tell me to "run the full test suite" — I already did.
+- Critical risks come from the actual diff, not a generic checklist. Grep for callers of changed functions. Name the specific files/routes at risk.
+- If the change is genuinely untestable manually (pure internal refactor with full test coverage, type-only change, doc-only change): say so explicitly with "MANUAL TEST N/A: [reason]" and proceed. Do NOT use this escape hatch for UI, API, or behavior changes.
+- If I say "skip test", create the PR but add a `## Skipped Manual Test` section to the PR body listing the untested risks.
+
+**NEVER:**
+- Create the PR before I reply "tested ✅" or "skip test"
+- Claim "should work" or "tests pass so it's fine" as a substitute
+- Generate a generic test checklist — risks must reference the actual changed code
 
 # Commits
 

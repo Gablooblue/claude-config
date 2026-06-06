@@ -38,7 +38,8 @@
     "lesson-learned@agent-toolkit": true,
     "requirements-clarity@agent-toolkit": true,
     "datadog-cli@agent-toolkit": true,
-    "humanizer@agent-toolkit": true
+    "humanizer@agent-toolkit": true,
+    "impeccable@impeccable": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -58,6 +59,12 @@
       "source": {
         "source": "github",
         "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable"
       }
     }
   },
