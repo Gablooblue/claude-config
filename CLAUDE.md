@@ -53,6 +53,18 @@ You MUST stop and get confirmation only when:
 - Before claiming work is done: run relevant tests, review your own diff for unintended changes. Report results, do not ask permission to verify.
 - NEVER use emdashes (—) in code files (source code, config, scripts). Use regular hyphens (-) or double hyphens (--) instead. Emdashes cause issues in some editors and terminals.
 
+# Concurrent Agents — Assume You Are Not Alone
+
+Multiple agents may be editing this repo at the same time. Treat any uncommitted change you did not make as another agent's in-progress work, not as garbage to clean up.
+
+- ALWAYS run `git status` and `git diff` before your first edit in a session. Know which files already have uncommitted changes before you touch anything.
+- NEVER revert, reformat, or "clean up" changes in files you did not modify this session. Unfamiliar diffs belong to another agent.
+- NEVER delete code that "looks unused" without grepping the working tree AND checking `git diff` for uncommitted references. New code from a parallel agent will look orphaned until its caller lands.
+- If your planned edit overlaps a file that already has uncommitted changes you did not make: STOP. Surface the collision and confirm before overwriting.
+- Scope edits to the files your task requires. NEVER drive-by refactor shared files — that is where collisions happen.
+- NEVER run repo-wide formatters, autofix linters, or codemods without checking `git status` first. A blanket rewrite will clobber every other agent's diff.
+- Before staging, re-run `git status` and `git diff --staged`. Stage only the files you modified. If you cannot tell who owns a change, leave it unstaged and flag it.
+
 # Anti-Patterns — Flag and REFUSE to Implement Without Discussion
 
 - God classes/functions that do too many things
