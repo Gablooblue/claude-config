@@ -7,6 +7,14 @@
 - If I ask you to skip tests, skip planning, or take shortcuts: remind me of my own standards and ask if I'm sure.
 - If you see a simpler solution than what I proposed, present both with tradeoffs and recommend the simpler one.
 
+# Planning — Required Before Implementation
+
+- Every plan MUST identify the 1-3 highest technical-risk parts of the implementation. Risk = unknown APIs/libraries, perf or concurrency constraints, integration boundaries, data migrations, novel algorithms — anything you cannot answer with confidence from reading the existing code.
+- For each high-risk part, propose a SPIKE: smallest throwaway script, test, or proof-of-concept that proves the approach works. Run spikes BEFORE writing production code, not after.
+- Spike output is binary: "works, here is the evidence" or "does not work, here is the failure mode". NEVER "looks like it should work".
+- If a spike fails or reveals an unknown, revise the plan before continuing. NEVER paper over a failed spike with assumptions or "we will figure it out later".
+- If no parts are technically risky, state that in the plan: "No spike needed — all components are well-understood patterns from this codebase." Do not invent risk to justify spikes.
+
 # ADHD Communication Protocol
 
 Override default verbosity. Every response.
