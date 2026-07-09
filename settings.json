@@ -4,21 +4,33 @@
   },
   "permissions": {
     "allow": [
-      "Read(//Users/gab/Work/analytics/**)",
       "Bash(./mvnw test:*)",
       "Bash(xargs cat:*)",
       "Bash(~/.pr-agent/venv/bin/python -m pr_agent.cli:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(/Users/gab/.claude/plugins/marketplaces/claude-plugins-official/plugins/ralph-loop/scripts/:*)",
-      "Bash(\"/Users/gab/.claude/plugins/marketplaces/claude-plugins-official/plugins/ralph-loop/scripts/:*)"
+      "Bash(gh pr diff:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; (git -C \"$repo\" pull --rebase --autostash --quiet >/dev/null 2>&1 || true) & fi"
+          }
+        ]
+      }
     ],
-    "additionalDirectories": [
-      "/Users/gab/Work/analytics/src/analytics/sources",
-      "/Users/gab/Work/analytics/src/analytics/evaluators",
-      "/Users/gab/Work/analytics/src/analytics/sinks",
-      "/Users/gab/Work/analytics/src/analytics/core",
-      "/Users/gab/Work/analytics/src/analytics/pipeline",
-      "/Users/gab/Work/analytics/src/analytics/config"
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; { git -C \"$repo\" add -A && { git -C \"$repo\" diff --quiet --cached || { git -C \"$repo\" commit -qm \"sync: auto from $(hostname)\" && git -C \"$repo\" push -q origin HEAD; }; }; } >/dev/null 2>&1 || true; fi"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {

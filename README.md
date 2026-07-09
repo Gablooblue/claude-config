@@ -9,7 +9,8 @@ This repo mirrors the contents of my `~/.claude/` directory so I can version, sh
 ```
 .
 ├── CLAUDE.md                       # Global Claude instructions (always active)
-├── settings.json                    # Global settings: env, permissions, enabled plugins, marketplaces
+├── install.sh                       # Symlinks this repo into ~/.claude (idempotent)
+├── settings.json                    # Global settings: env, permissions, hooks, enabled plugins, marketplaces
 ├── agents/                          # Custom sub-agents (invoked by name)
 │   └── adversarial-code-reviewer.md
 ├── commands/                        # Custom slash commands
@@ -30,28 +31,46 @@ This repo mirrors the contents of my `~/.claude/` directory so I can version, sh
 
 ## Installation
 
-Clone into a temporary location, then symlink (or copy) the pieces you want into `~/.claude/`.
-
 ```sh
 git clone https://github.com/Gablooblue/claude-config.git ~/src/claude-config
-cd ~/src/claude-config
-
-# Back up anything existing first
-mkdir -p ~/.claude-backup && cp -R ~/.claude/* ~/.claude-backup/ 2>/dev/null || true
-
-# Symlink approach — edits in the repo take effect immediately
-ln -sf "$PWD/CLAUDE.md"       ~/.claude/CLAUDE.md
-ln -sf "$PWD/settings.json"   ~/.claude/settings.json
-ln -sfn "$PWD/agents"         ~/.claude/agents
-ln -sfn "$PWD/commands"       ~/.claude/commands
-ln -sfn "$PWD/skills"         ~/.claude/skills
-# plugins/*.json are informational; copy if you want them in ~/.claude
-mkdir -p ~/.claude/plugins
-cp plugins/installed_plugins.json   ~/.claude/plugins/installed_plugins.json
-cp plugins/known_marketplaces.json  ~/.claude/plugins/known_marketplaces.json
+~/src/claude-config/install.sh
 ```
 
-To reproduce the plugin setup, open Claude Code and re-add each marketplace listed in `plugins/known_marketplaces.json`, then install the plugins listed in `plugins/installed_plugins.json`. The `settings.json` file already contains `enabledPlugins` and `extraKnownMarketplaces` so Claude Code will pick them up once the marketplaces are reachable.
+The script symlinks `CLAUDE.md`, `settings.json`, `agents/`, `commands/`, `skills/`, and `docs/` into `~/.claude/`, so the repo is the source of truth and edits take effect immediately. Any pre-existing real files are moved to a timestamped `~/.claude-backup-*` directory first, so it is safe to re-run.
+
+Plugins reinstall themselves: `settings.json` carries `enabledPlugins` and `extraKnownMarketplaces`, so Claude Code refetches the marketplaces and installs the plugins on first launch. The `plugins/*.json` files are informational snapshots.
+
+Requires `readlink -f` for the auto-sync hooks (any Linux; macOS 12.3+).
+
+## Auto-sync
+
+Two hooks in `settings.json` keep every machine in sync automatically:
+
+- **`SessionStart`** (startup/resume) — runs `git pull --rebase --autostash` on the repo in the background, so each session starts with the latest config.
+- **`SessionEnd`** — commits any local config changes (`sync: auto from <hostname>`) and pushes them.
+
+Both hooks locate the repo by resolving the `~/.claude/CLAUDE.md` symlink, so the clone can live anywhere. They no-op silently when `~/.claude/CLAUDE.md` is not a symlink (i.e. this repo is not installed), and never block the session.
+
+Failure mode to know about: if two machines edit the same file offline, the next pull's rebase can stop on a conflict. The hooks stay silent about it — if config changes stop propagating, run `git status` in the repo and finish the rebase by hand.
+
+## Machine-specific settings — `settings.local.json`
+
+The synced `settings.json` must stay portable, so anything with absolute paths belongs in `~/.claude/settings.local.json` (created as an empty stub by `install.sh`, never committed). Claude Code merges it with `settings.json`. Example:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/gab/Work/analytics/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/gab/Work/analytics/src/analytics/core"
+    ]
+  }
+}
+```
+
+If you previously had machine-specific `permissions.allow` entries or `additionalDirectories` in the synced `settings.json`, move them here after pulling this version.
 
 ## What each piece does
 
@@ -66,8 +85,8 @@ Always-on rules Claude follows across every project. Highlights:
 
 ### `settings.json` — global Claude settings
 - `env` — environment variables (e.g. `ENABLE_LSP_TOOL`).
-- `permissions.allow` — pre-approved `Bash`, `Read`, and tool patterns.
-- `permissions.additionalDirectories` — extra repo paths Claude may access.
+- `permissions.allow` — pre-approved `Bash`, `Read`, and tool patterns (portable ones only; machine-specific paths go in `settings.local.json`).
+- `hooks` — the auto-sync hooks described above.
 - `enabledPlugins` — which installed plugins are active.
 - `extraKnownMarketplaces` — custom plugin marketplaces (including private ones).
 - `effortLevel` — Claude's default effort tier.
@@ -96,21 +115,19 @@ Design specs and reference material I reuse across skills.
 
 ## Updating from `~/.claude`
 
-After editing anything live in `~/.claude/`, sync it back into this repo:
+With the symlink install, edits made live in `~/.claude/` land directly in the repo, and the `SessionEnd` hook commits and pushes them automatically. To sync manually (e.g. after editing outside a Claude session):
 
 ```sh
-cp ~/.claude/CLAUDE.md       ./CLAUDE.md
-cp ~/.claude/settings.json   ./settings.json
-rsync -a --delete ~/.claude/agents/   ./agents/
-rsync -a --delete ~/.claude/commands/ ./commands/
-rsync -a --delete ~/.claude/docs/     ./docs/
-rsync -a --delete ~/.claude/skills/   ./skills/
-cp ~/.claude/plugins/installed_plugins.json  ./plugins/installed_plugins.json
-cp ~/.claude/plugins/known_marketplaces.json ./plugins/known_marketplaces.json
-git add -A && git commit -m "sync from ~/.claude"
+cd ~/src/claude-config
+git add -A && git commit -m "sync from ~/.claude" && git push
 ```
 
-If you use the symlink install above, this is a no-op — the repo *is* the source of truth.
+To refresh the plugin snapshots after installing or removing plugins:
+
+```sh
+cp ~/.claude/plugins/installed_plugins.json  ./plugins/installed_plugins.json
+cp ~/.claude/plugins/known_marketplaces.json ./plugins/known_marketplaces.json
+```
 
 ## What's deliberately NOT in this repo
 
