@@ -159,9 +159,9 @@ You MUST block PR creation for any feature, bug fix, or UI change until I have m
 - NEVER make a PR without a ticket number in the title
 - NEVER push plan files into the git repo.
 
-# Jira Tickets
+# Linear Tickets
 
-- If no ticket number exists for the current task, create one via the Jira MCP tools.
+- If no ticket number exists for the current task, create one via the Linear MCP tools.
 - Move the ticket to the board and set status to "In Progress" or "PR Review" as appropriate.
 
 # PR Reviews — Leaving
