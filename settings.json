@@ -51,7 +51,8 @@
     "requirements-clarity@agent-toolkit": true,
     "datadog-cli@agent-toolkit": true,
     "humanizer@agent-toolkit": true,
-    "impeccable@impeccable": true
+    "impeccable@impeccable": true,
+    "caveman@caveman": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -77,6 +78,12 @@
       "source": {
         "source": "github",
         "repo": "pbakaus/impeccable"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
       }
     }
   },
