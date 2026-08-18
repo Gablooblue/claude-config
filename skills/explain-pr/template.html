@@ -57,7 +57,10 @@ details[open]>summary~*{color:var(--ink)}
 .badge.new{color:var(--accent)}
 code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.85em;background:transparent;padding:0;overflow-wrap:anywhere}
 pre{background:var(--card);border:0;border-radius:8px;padding:.55rem .75rem;overflow-x:auto;max-width:100%;font:.78rem/1.55 ui-monospace,"SF Mono",Menlo,monospace}
-pre.mermaid{background:var(--card);border:0;border-radius:10px;padding:1rem;overflow-x:auto}
+pre.mermaid{background:var(--card);border:0;border-radius:10px;padding:1rem;overflow-x:auto;cursor:zoom-in}
+.zoom-overlay{position:fixed;inset:0;z-index:99;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
+.zoom-overlay svg{width:100%;height:100%;max-width:none!important}
+.zoom-overlay::after{content:"click or press Esc to close";position:fixed;top:.8rem;right:1.2rem;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 ul{padding-left:1.1rem;margin:.3rem 0}
 li{margin:.25rem 0}
 dl.card dt{font-weight:600;margin-top:.85rem}
@@ -102,6 +105,29 @@ summary:hover{color:var(--accent)}
   </section>
 </main>
 <script>
+/* Diagram lightbox: click a rendered flowchart to view it full-screen; click or Esc closes. */
+document.addEventListener('click',function(e){
+  var pre=e.target.closest('pre.mermaid');
+  if(!pre||document.querySelector('.zoom-overlay'))return;
+  var svg=pre.querySelector('svg');
+  var ov=document.createElement('div');
+  ov.className='zoom-overlay';
+  var clone=(svg||pre).cloneNode(true);
+  if(svg){
+    clone.removeAttribute('width');
+    clone.removeAttribute('height');
+    clone.style.maxWidth='none';
+    clone.style.width='100%';
+    clone.style.height='100%';
+  }
+  ov.appendChild(clone);
+  document.body.appendChild(ov);
+  document.body.style.overflow='hidden';
+  var esc=function(ev){if(ev.key==='Escape')close()};
+  var close=function(){ov.remove();document.body.style.overflow='';document.removeEventListener('keydown',esc)};
+  ov.addEventListener('click',close);
+  document.addEventListener('keydown',esc);
+});
 /* Glossary tooltips: every mention of a glossary term in the page body gets a dotted
    underline and a hover tooltip carrying that term's definition from the dl below. */
 window.addEventListener('load',function(){
