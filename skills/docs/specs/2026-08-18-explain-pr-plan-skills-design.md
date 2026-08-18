@@ -91,6 +91,24 @@ Rejected alternatives:
 - Guide update: add/refresh entries for every touched component, add new
   glossary terms, add/update the affected flow diagram.
 
+## Component 2b: explain-pr-comments skill (added 2026-08-18)
+
+- Sibling skill at `~/.claude/skills/explain-pr-comments/`, same template
+  DNA and shared repo-guide conventions.
+- Input: PR number (argument or current branch via gh). Fetches unresolved
+  review threads via GraphQL (reviewThreads with isResolved filtering;
+  spike-verified against a live PR) plus top-level PR comments.
+- Scope: human AND AI reviewers (Cubic, Copilot) treated identically;
+  resolved threads and pure CI/status noise dropped; outdated threads kept
+  but flagged.
+- Every comment gets a verdict judged against the code read in full:
+  GROUNDED (red, with evidence), YOUR CALL (amber, tradeoff with both
+  sides costed), MISTAKEN (green, with the contradicting code quoted).
+- No drafted replies (Gab's explicit choice); "Acting on it involves"
+  states scope only.
+- Page sections: TL;DR (with verdict counts) -> comments grid ->
+  Needs your call -> glossary. No flow diagram.
+
 ## Component 3: explain-plan skill
 
 - Input: an agent's plan - pasted text, a file path, or the plan present

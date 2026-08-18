@@ -128,7 +128,7 @@ Guide file format:
 ````markdown
 # Repo guide: <key>
 
-Maintained by the explain-pr and explain-plan skills. This is a cache of understanding; the code is the truth.
+Maintained by the explain-pr, explain-plan, and explain-pr-comments skills. This is a cache of understanding; the code is the truth.
 
 Updated: YYYY-MM-DD
 

@@ -1,5 +1,5 @@
 <title>{{TITLE}}</title>
-<!-- Fixed template for the explain-plan skill. Fill the double-brace tokens only. Never restructure. -->
+<!-- Fixed template for the explain-pr-comments skill. Fill the double-brace tokens only. Never restructure. -->
 <style>
 :root{
   --bg:#f8f9fb;--card:#eef0f4;--ink:#1a1d23;--muted:#5d6470;--line:#e2e5ea;
@@ -75,9 +75,8 @@ summary:hover{color:var(--accent)}
 </style>
 <nav>
   <a href="#tldr"><strong>TL;DR</strong></a>
-  <a href="#map">Plan-to-code</a>
-  <a href="#risks">Risks ({{RISK_COUNT}})</a>
-  <a href="#questions">Questions</a>
+  <a href="#comments">Comments ({{COMMENT_COUNT}})</a>
+  <a href="#calls">Your call ({{CALL_COUNT}})</a>
   <a href="#glossary">Glossary</a>
 </nav>
 <main>
@@ -87,18 +86,13 @@ summary:hover{color:var(--accent)}
     <h2>TL;DR</h2>
     <div class="card">{{TLDR_HTML}}</div>
   </section>
-  <section id="map">
-    <h2>Plan-to-code map</h2>
-    <pre class="mermaid">{{PLAN_MERMAID}}</pre>
-    {{MAP_ITEMS}}
+  <section id="comments">
+    <h2>Comments, judged against the code</h2>
+    {{COMMENT_ITEMS}}
   </section>
-  <section id="risks">
-    <h2>Risk flags</h2>
-    {{RISK_ITEMS}}
-  </section>
-  <section id="questions">
-    <h2>Ask the agent before approving</h2>
-    <ol class="card">{{QUESTION_ITEMS}}</ol>
+  <section id="calls">
+    <h2>Needs your call</h2>
+    {{CALL_ITEMS}}
   </section>
   <section id="glossary">
     <h2>Glossary</h2>
