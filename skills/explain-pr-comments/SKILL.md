@@ -112,9 +112,9 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 
 Comment item shape (add `<span class="badge amber">outdated</span>` after the verdict badge when the thread is outdated):
 
-```html
 Every comment item MUST open with a "Bigger picture" bullet that a reader with zero repo knowledge can follow: the code's role in the system, what the PR is doing to it, and which part of that this comment targets.
 
+```html
 <details>
   <summary><code>session.ts:88</code> <span class="badge red">grounded</span> cubic-ai: expired sessions crash the handler</summary>
   <ul>
@@ -140,7 +140,10 @@ Needs-your-call item shape:
 </details>
 ```
 
-Write the filled HTML to the scratchpad, then publish with the Artifact tool: favicon `💬` (never change it), title from `{{TITLE}}`. If the Artifact tool is unavailable, write the file to `~/.claude/repo-guides/renders/<key>-<title-slug>.html` and send it with SendUserFile (display: render).
+Publish the page, adapting to whatever harness you are running in:
+
+1. If an Artifact-publishing tool exists in this session (Claude Code): write the filled HTML to a scratch file and publish it with favicon `💬` (never change it) and title from `{{TITLE}}`.
+2. Otherwise (Codex or any other harness): write the filled HTML to `~/.claude/repo-guides/renders/<key>-<title-slug>.html`, then surface it - send it as a rendered file if a file-sending tool exists, else run `open <path>` (macOS) and print the path.
 
 ## Step 5 - Update the guide
 
