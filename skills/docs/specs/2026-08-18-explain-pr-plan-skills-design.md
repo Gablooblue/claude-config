@@ -81,9 +81,13 @@ Rejected alternatives:
     with the changed step visually marked.
   - **Component breakdown** - per touched file: what it is, why it exists,
     what this change does to it, what breaks if the change is wrong.
-  - **Check-this-yourself** - 2-4 concrete manual verifications (URLs to
-    hit, commands to run). Feeds Gab's manual-test-before-PR rule.
-  - **Glossary** - terms used above, glossed.
+  - **Worth a closer look** - 2-4 items naming the diff's biggest design
+    decisions/tradeoffs and exactly where to scrutinize them (revised
+    2026-08-18: replaced the original check-this-yourself section at Gab's
+    request).
+  - **Glossary** - terms used above, glossed. Every mention of a glossary
+    term in the page body gets a hover tooltip with its definition
+    (template JS, driven by the glossary dl).
 - Guide update: add/refresh entries for every touched component, add new
   glossary terms, add/update the affected flow diagram.
 
@@ -121,7 +125,11 @@ spatial memory ("risks are always the red box, third section down").
   color.
 - Max 2 sentences per bullet, enforced in skill instructions.
 - No animation, no decorative noise.
-- Check-this-yourself items are literal checkboxes with copyable commands.
+- Glossary terms get dotted underlines wherever they appear; hovering shows
+  the definition as a tooltip (no scrolling to the glossary).
+- Exception to self-containment (added 2026-08-18): a progressive-
+  enhancement script loads mermaid from a CDN only when no native renderer
+  ran (i.e. the page is opened as a local file, not an artifact).
 
 ## Explanation style (baked into both SKILL.md files)
 

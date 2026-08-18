@@ -1,6 +1,6 @@
 ---
 name: explain-pr
-description: Explain what a PR, branch, or working-tree diff actually does, written for a reader who barely knows the repo. Produces a visual HTML page (process map, component breakdown, manual checks, glossary) and updates the per-repo orientation guide. Use when the user asks "what does this PR do", wants a diff or agent-written change explained, or invokes /explain-pr.
+description: Explain what a PR, branch, or working-tree diff actually does, written for a reader who barely knows the repo. Produces a visual HTML page (process map, component breakdown, design decisions worth a closer look, glossary with hover tooltips) and updates the per-repo orientation guide. Use when the user asks "what does this PR do", wants a diff or agent-written change explained, or invokes /explain-pr.
 ---
 
 # Explain PR
@@ -66,8 +66,8 @@ Produce these five pieces, obeying the style rules:
    If the change has no meaningful flow (pure config, docs), diagram the smallest surrounding process it affects.
    Mermaid safety - a parse failure shows a blank or broken diagram, so these are MUST rules: wrap EVERY node label in double quotes (`A["fetchUser(id)"]`, including inside shape brackets like `E[("db.query")]`); NEVER put `<`, `>`, or `&` anywhere in the diagram source - the HTML parser eats them before mermaid runs (write `Promise of User`, never `Promise<User>`); node ids must be plain letters and digits only.
 3. **Component breakdown**: one entry per touched file with exactly these four bullets: What it is / Why it exists / What this change does to it / If this change is wrong, what breaks. Assign a severity badge: red (data loss, auth, money, migrations), amber (user-visible behavior), green (internal, low blast radius). Mark newly created files with a NEW badge.
-4. **Check this yourself**: 2-4 concrete manual verifications with exact commands or URLs and the expected observable result. These must come from THIS diff's risks, not a generic checklist.
-5. **Glossary**: every term you glossed, defined in one sentence each.
+4. **Worth a closer look**: 2-4 items naming the biggest design decisions or tradeoffs this diff makes - the places a reviewer should actually spend time. Each item: what was decided, why it matters, and exactly where to look (file and function). These must come from THIS diff, not a generic checklist. Severity badge by consequence-if-wrong: red, amber, or green.
+5. **Glossary**: every term you glossed, defined in one sentence each. The page turns every mention of a glossary term into a hover tooltip automatically, so keep each definition a single self-contained sentence.
 
 ## Step 4 - Render the page
 
@@ -80,8 +80,8 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 | `{{FLOW_MERMAID}}` | the mermaid source from Step 3.2 |
 | `{{COMPONENT_COUNT}}` | number of component entries |
 | `{{COMPONENT_ITEMS}}` | one `<details>` block per file, shape below |
-| `{{CHECK_COUNT}}` | number of check items |
-| `{{CHECK_ITEMS}}` | one `.check` div per item, shape below |
+| `{{HOTSPOT_COUNT}}` | number of closer-look items |
+| `{{HOTSPOT_ITEMS}}` | one `<details>` block per item, shape below |
 | `{{GLOSSARY_ITEMS}}` | `<dt>term</dt><dd>definition</dd>` pairs |
 
 Component `<details>` shape:
@@ -98,14 +98,17 @@ Component `<details>` shape:
 </details>
 ```
 
-Check item shape:
+Closer-look item shape:
 
 ```html
-<div class="check"><input type="checkbox"><div>
-  <strong>Rate limit actually triggers</strong><button class="copy">copy</button>
-  <pre>for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_code}\n" localhost:3000/api/users; done</pre>
-  <p>Expect 429 responses after request 20.</p>
-</div></div>
+<details>
+  <summary><strong>Rate limiting counts per IP, not per user</strong> <span class="badge amber">tradeoff</span></summary>
+  <ul>
+    <li><strong>What was decided:</strong> The limiter keys on request IP, so all users behind one office NAT share a budget.</li>
+    <li><strong>Why it matters:</strong> A large customer on one egress IP can lock themselves out under normal use.</li>
+    <li><strong>Where to look:</strong> <code>rate_limiter.ts</code>, the key expression in <code>bucketFor()</code>.</li>
+  </ul>
+</details>
 ```
 
 Write the filled HTML to the scratchpad, then publish with the Artifact tool: favicon `🔍` (never change it), title from `{{TITLE}}`. If the Artifact tool is unavailable, write the file to `~/.claude/repo-guides/renders/<key>-<title-slug>.html` and send it with SendUserFile (display: render).

@@ -90,7 +90,7 @@ Map item shape:
 
 ```html
 <details>
-  <summary>Step 2: add rate limiting <span class="badge amber">1 flag</span> touches <code>src/middleware/</code></summary>
+  <summary><strong>Step 2: add rate limiting</strong> <span class="badge amber">1 flag</span> touches <code>src/middleware/</code></summary>
   <ul>
     <li><strong>Code it touches:</strong> ...</li>
     <li><strong>What that code does today:</strong> ...</li>
@@ -103,7 +103,7 @@ Risk item shape:
 
 ```html
 <details>
-  <summary><span class="badge red">MISMATCH</span> plan misreads <code>SessionStore.get</code></summary>
+  <summary><span class="badge red">MISMATCH</span> <strong>plan misreads <code>SessionStore.get</code></strong></summary>
   <ul>
     <li><strong>Plan says:</strong> "returns null on expiry"</li>
     <li><strong>Code says:</strong> throws <code>TokenExpiredError</code> (session.ts:88)</li>
@@ -119,7 +119,7 @@ Write the filled HTML to the scratchpad, then publish with the Artifact tool: fa
 RE-READ `~/.claude/repo-guides/<key>.md` from disk NOW - an agent in another worktree may have written it since Step 0. Merge: keep entries you did not touch, replace entries you refreshed, append new ones. Then write the whole file.
 
 - Every component you explained gets an entry stamped with `git log -1 --format=%H -- <path>` and today's date.
-- Add new glossary terms (skip duplicates).
+- Add new glossary terms (skip duplicates). The page turns every mention of a glossary term into a hover tooltip automatically, so keep each definition a single self-contained sentence.
 - If `## Overview` is missing or empty, write it now: what the app does, max 5 sentences.
 
 Guide file format:

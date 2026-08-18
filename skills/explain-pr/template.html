@@ -25,10 +25,10 @@ body{background:var(--bg);color:var(--ink);font:15px/1.55 "Avenir Next",ui-sans-
 main{max-width:72rem;margin:0 auto;padding:0 1.5rem}
 section{scroll-margin-top:3.5rem}
 h1,h2{text-wrap:balance}
-#components,#checks,#map,#risks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(23rem,100%),1fr));gap:0 2.5rem;align-items:start}
-#components h2,#checks h2,#map h2,#risks h2{grid-column:1/-1;margin-bottom:0;border-bottom:0;padding-bottom:.2rem}
+#components,#hotspots,#map,#risks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(23rem,100%),1fr));gap:0 2.5rem;align-items:start}
+#components h2,#hotspots h2,#map h2,#risks h2{grid-column:1/-1;margin-bottom:0;border-bottom:0;padding-bottom:.2rem}
 #map pre.mermaid{grid-column:1/-1}
-#components details,#map details,#risks details,#checks .check{margin:0}
+#components details,#map details,#risks details,#hotspots details{margin:0}
 details[open]{grid-column:1/-1}
 details ul{max-width:80ch}
 #glossary dl.card{columns:2 24rem;column-gap:3rem}
@@ -46,7 +46,9 @@ h2{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08e
 #tldr p{margin:.4rem 0;font-size:1.05rem;line-height:1.6}
 details{background:transparent;border:0;border-top:1px solid var(--line);border-radius:0;margin:0;padding:0}
 details[open]{padding-bottom:.8rem}
-summary{cursor:pointer;padding:.55rem 0;font-weight:600;font-size:.9rem;display:flex;gap:.55rem;align-items:baseline;flex-wrap:wrap}
+summary{cursor:pointer;padding:.55rem 0;font-weight:400;font-size:.9rem;color:var(--muted);display:flex;gap:.55rem;align-items:baseline;flex-wrap:wrap}
+summary code,summary strong{font-weight:600;color:var(--ink)}
+details[open]>summary~*{color:var(--ink)}
 .badge{font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.35em}
 .badge::before{content:"";width:.5em;height:.5em;border-radius:50%;background:currentColor}
 .badge.red{color:var(--red)}
@@ -58,27 +60,21 @@ pre{background:var(--card);border:0;border-radius:8px;padding:.55rem .75rem;over
 pre.mermaid{background:var(--card);border:0;border-radius:10px;padding:1rem;overflow-x:auto}
 ul{padding-left:1.1rem;margin:.3rem 0}
 li{margin:.25rem 0}
-.check{display:flex;gap:.6rem;align-items:flex-start;background:transparent;border:0;border-top:1px solid var(--line);border-radius:0;padding:.6rem 0;margin:0}
-.check input{margin-top:.3rem}
-.check>div{min-width:0;flex:1}
-.check pre{margin:.45rem 0 0}
-.check strong{font-size:.9rem}
-.copy{float:right;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:0;background:transparent;color:var(--accent);cursor:pointer;padding:.15rem .3rem}
 dl.card dt{font-weight:600;margin-top:.85rem}
 dl.card dd{margin:0;color:var(--muted)}
 ol.card{padding-left:1.3rem;max-width:80ch;margin:.3rem 0}
 nav a:hover{color:var(--accent)}
 summary:hover{color:var(--accent)}
-.copy:hover{color:var(--ink)}
+.term{text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--accent);text-underline-offset:3px;cursor:help;position:relative}
+.term:hover::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + .35rem);z-index:30;background:var(--ink);color:var(--bg);padding:.45rem .65rem;border-radius:8px;width:max-content;max-width:36ch;font:400 .78rem/1.5 "Avenir Next",ui-sans-serif,system-ui,sans-serif;white-space:normal;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-input[type="checkbox"]{accent-color:var(--accent)}
 ::selection{background:var(--accent-soft)}
 </style>
 <nav>
   <a href="#tldr"><strong>TL;DR</strong></a>
   <a href="#flow">Flow</a>
   <a href="#components">Components ({{COMPONENT_COUNT}})</a>
-  <a href="#checks">Checks ({{CHECK_COUNT}})</a>
+  <a href="#hotspots">Closer look ({{HOTSPOT_COUNT}})</a>
   <a href="#glossary">Glossary</a>
 </nav>
 <main>
@@ -95,9 +91,9 @@ input[type="checkbox"]{accent-color:var(--accent)}
     <h2>Touched components</h2>
     {{COMPONENT_ITEMS}}
   </section>
-  <section id="checks">
-    <h2>Check this yourself</h2>
-    {{CHECK_ITEMS}}
+  <section id="hotspots">
+    <h2>Worth a closer look</h2>
+    {{HOTSPOT_ITEMS}}
   </section>
   <section id="glossary">
     <h2>Glossary</h2>
@@ -105,11 +101,51 @@ input[type="checkbox"]{accent-color:var(--accent)}
   </section>
 </main>
 <script>
-document.addEventListener('click',function(e){
-  if(!e.target.classList.contains('copy'))return;
-  var pre=e.target.closest('.check').querySelector('pre');
-  navigator.clipboard.writeText(pre.textContent).then(function(){
-    e.target.textContent='copied';setTimeout(function(){e.target.textContent='copy'},1200);
+/* Glossary tooltips: every mention of a glossary term in the page body gets a dotted
+   underline and a hover tooltip carrying that term's definition from the dl below. */
+window.addEventListener('load',function(){
+  var defs=[];
+  document.querySelectorAll('#glossary dt').forEach(function(dt){
+    var dd=dt.nextElementSibling;
+    if(!dd||dd.tagName!=='DD')return;
+    var tip=dd.textContent.trim();
+    dt.textContent.replace(/\s*\([^)]*\)/g,'').split(/\s*\/\s*/).forEach(function(t){
+      t=t.trim();
+      if(t.length>2)defs.push({t:t,tip:tip});
+    });
+  });
+  if(!defs.length)return;
+  defs.sort(function(a,b){return b.t.length-a.t.length});
+  var esc=function(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')};
+  var pattern;
+  try{
+    pattern=new RegExp('(?<![A-Za-z0-9])('+defs.map(function(d){return esc(d.t)}).join('|')+')(?![A-Za-z0-9])','gi');
+  }catch(err){return}
+  var tipFor=function(m){m=m.toLowerCase();for(var i=0;i<defs.length;i++){if(defs[i].t.toLowerCase()===m)return defs[i].tip}return ''};
+  var walker=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    var p=n.parentElement;
+    if(!p||p.closest('#glossary,pre,code,script,style,.term'))return NodeFilter.FILTER_REJECT;
+    pattern.lastIndex=0;
+    var ok=pattern.test(n.nodeValue);
+    pattern.lastIndex=0;
+    return ok?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;
+  }});
+  var nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(function(n){
+    var txt=n.nodeValue,frag=document.createDocumentFragment(),last=0,m;
+    pattern.lastIndex=0;
+    while((m=pattern.exec(txt))){
+      frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+      var s=document.createElement('span');
+      s.className='term';
+      s.textContent=m[0];
+      s.setAttribute('data-tip',tipFor(m[0]));
+      frag.appendChild(s);
+      last=m.index+m[0].length;
+    }
+    frag.appendChild(document.createTextNode(txt.slice(last)));
+    n.parentNode.replaceChild(frag,n);
   });
 });
 /* Mermaid fallback: the artifact viewer renders pre.mermaid natively; a local file has no
