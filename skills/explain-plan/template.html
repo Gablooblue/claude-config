@@ -22,21 +22,31 @@
   --green:#7ed09a;--green-soft:#1d3527;
 }
 body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif;margin:0;padding-bottom:4rem}
-main{max-width:40rem;margin:0 auto;padding:0 1rem}
+main{max-width:72rem;margin:0 auto;padding:0 1.25rem}
 section{scroll-margin-top:3.25rem}
 h1,h2{text-wrap:balance}
+#components,#checks,#map,#risks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(23rem,100%),1fr));gap:.5rem;align-items:start}
+#components h2,#checks h2,#map h2,#risks h2{grid-column:1/-1;margin-bottom:0}
+#map pre.mermaid{grid-column:1/-1}
+#components details,#map details,#risks details,#checks .check{margin:0}
+details[open]{grid-column:1/-1}
+details ul{max-width:80ch}
+#glossary dl.card{columns:2 24rem;column-gap:2.5rem}
+dl.card dt{break-inside:avoid;break-after:avoid}
+dl.card dd{break-inside:avoid}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:1rem;padding:.65rem 1rem;font-size:.9rem;z-index:9;overflow-x:auto}
 nav a{color:var(--muted);text-decoration:none;white-space:nowrap}
 nav a strong{color:var(--ink)}
-h1{font-size:1.3rem;margin:1.4rem 0 .2rem}
-h2{font-size:1.15rem;margin:2.2rem 0 .8rem}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem}
+h1{font-size:1.3rem;margin:1.2rem 0 .2rem}
+h2{font-size:1.1rem;margin:1.6rem 0 .6rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem}
 #tldr h2{color:var(--accent)}
-#tldr p{margin:.3rem 0;font-size:1.05rem}
-details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:.5rem 0;padding:.2rem .9rem}
-details[open]{padding-bottom:.8rem}
-summary{cursor:pointer;padding:.6rem 0;font-weight:600;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+#tldr .card{max-width:80ch}
+#tldr p{margin:.3rem 0}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:.45rem 0;padding:.15rem .7rem}
+details[open]{padding-bottom:.6rem}
+summary{cursor:pointer;padding:.5rem 0;font-weight:600;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
 .badge{font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:99px;letter-spacing:.02em}
 .badge.red{background:var(--red-soft);color:var(--red)}
 .badge.amber{background:var(--amber-soft);color:var(--amber)}
@@ -45,9 +55,9 @@ summary{cursor:pointer;padding:.6rem 0;font-weight:600;display:flex;gap:.6rem;al
 code{background:var(--accent-soft);border-radius:4px;padding:.05rem .3rem;font-size:.88em;overflow-wrap:anywhere}
 pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem;overflow-x:auto;max-width:100%}
 pre.mermaid{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;overflow-x:auto}
-ul{padding-left:1.2rem}
-li{margin:.35rem 0}
-.check{display:flex;gap:.6rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0}
+ul{padding-left:1.1rem}
+li{margin:.2rem 0}
+.check{display:flex;gap:.6rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.55rem .7rem;margin:.5rem 0}
 .check input{margin-top:.25rem}
 .check>div{min-width:0;flex:1}
 .check pre{margin:.4rem 0 0}
