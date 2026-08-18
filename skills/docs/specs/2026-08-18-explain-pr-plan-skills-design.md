@@ -168,5 +168,7 @@ Enforced in skill instructions so it survives fresh sessions:
   share includes); two copies is acceptable at this scale.
 - Use superpowers:writing-skills for structure and prompt-master for
   review during implementation.
+- The template.html files MUST get an impeccable pass during
+  implementation (build once, reused by every run).
 - No spike needed - all components are well-understood patterns (git/gh
   commands, artifact publishing, markdown file I/O).
