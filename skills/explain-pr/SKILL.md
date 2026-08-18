@@ -60,7 +60,7 @@ If all are empty: state "No changes found" and STOP.
 
 Produce these five pieces, obeying the style rules:
 
-1. **TL;DR**: what this PR does, max 3 sentences, plain language.
+1. **TL;DR**: one plain-language lead sentence saying what this PR does, then 2-4 bullets covering the distinct things it changes. Max 2 sentences per bullet.
 2. **Flow diagram**: mermaid `flowchart LR` of the affected path. Unchanged steps get `class ... dim`, new or modified steps get `class ... hot`. Include both classDefs:
    `classDef dim fill:#e5e7eb,stroke:#9ca3af,color:#4b5563` and `classDef hot fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px`.
    If the change has no meaningful flow (pure config, docs), diagram the smallest surrounding process it affects.
@@ -76,7 +76,7 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 | Token | Content |
 |---|---|
 | `{{TITLE}}` | `<repo-key> PR <n>` or `<repo-key> <branch>` |
-| `{{TLDR_HTML}}` | up to 3 `<p>` sentences |
+| `{{TLDR_HTML}}` | one lead `<p>` sentence, then a `<ul>` of 2-4 bullets |
 | `{{FLOW_MERMAID}}` | the mermaid source from Step 3.2 |
 | `{{COMPONENT_COUNT}}` | number of component entries |
 | `{{COMPONENT_ITEMS}}` | one `<details>` block per file, shape below |

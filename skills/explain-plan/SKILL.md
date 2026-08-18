@@ -76,7 +76,7 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 | Token | Content |
 |---|---|
 | `{{TITLE}}` | `<repo-key> plan: <short plan topic>` |
-| `{{TLDR_HTML}}` | up to 3 `<p>` sentences: what the plan builds and your one-line verdict on how grounded it is |
+| `{{TLDR_HTML}}` | one lead `<p>` sentence on what the plan builds plus your verdict on how grounded it is, then a `<ul>` of 2-4 bullets for the key findings |
 | `{{PLAN_MERMAID}}` | mermaid `flowchart LR` of plan steps pointing at the files they touch; steps with red flags get `class ... hot`, clean steps `class ... dim`. Include both classDefs: `classDef dim fill:#e5e7eb,stroke:#9ca3af,color:#4b5563` and `classDef hot fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px` |
 | `{{MAP_ITEMS}}` | one `<details>` block per plan step, shape below |
 | `{{RISK_COUNT}}` | number of risk flags |
