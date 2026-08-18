@@ -60,7 +60,7 @@ query($o:String!,$r:String!,$n:Int!){
 }' -f o=<owner> -f r=<repo> -F n=<pr-number>
 ```
 
-4. Also fetch top-level conversation comments: `gh pr view <n> --json comments`.
+4. Also fetch the PR's intent and top-level conversation comments: `gh pr view <n> --json title,body,comments`. The title and body are REQUIRED context - a comment only makes sense against what the PR is trying to do.
 5. Filter:
    - DROP threads where `isResolved` is true.
    - DROP pure status noise: CI results, coverage percentages, deploy previews, "LGTM"-only comments with no claim about the code.
@@ -77,6 +77,7 @@ If `gh` is missing or unauthenticated: say exactly what failed and STOP - there 
 For every surviving comment:
 
 - Read the file it targets IN FULL at the current HEAD, not just the `diffHunk`. NEVER judge a comment from the hunk alone.
+- Establish the bigger picture FIRST: what role this file/function plays in the system (what flow it sits in, who calls it), what the PR is trying to do here (from the PR title/body), and which part of that the comment is actually about. The repo guide's Overview and Flows are your first source; derive from code when the guide is silent.
 - Establish what that code does TODAY. For OUTDATED threads, note what changed since the comment.
 - Grep callers when the comment claims blast-radius effects ("this breaks X") - verify who actually calls it.
 - Reuse fresh guide entries for context instead of re-deriving known components.
@@ -102,7 +103,7 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 |---|---|
 | `{{TITLE}}` | what the review is about, 3-7 plain words (e.g. `Tenant isolation review pushback`) - NEVER just the repo name and number |
 | `{{SUBTITLE}}` | `<repo-key> - PR <n> comments - YYYY-MM-DD` |
-| `{{TLDR_HTML}}` | one lead `<p>` sentence, then a `<ul>` of 2-4 bullets including the verdict counts (e.g. "5 grounded, 2 your call, 1 mistaken") |
+| `{{TLDR_HTML}}` | one lead `<p>` sentence stating what the PR is trying to do and what the review conversation is about, then a `<ul>` of 2-4 bullets including the verdict counts (e.g. "5 grounded, 2 your call, 1 mistaken") |
 | `{{COMMENT_COUNT}}` | number of comment entries |
 | `{{COMMENT_ITEMS}}` | one `<details>` block per comment, shape below |
 | `{{CALL_COUNT}}` | number of needs-your-call entries |
@@ -112,9 +113,12 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 Comment item shape (add `<span class="badge amber">outdated</span>` after the verdict badge when the thread is outdated):
 
 ```html
+Every comment item MUST open with a "Bigger picture" bullet that a reader with zero repo knowledge can follow: the code's role in the system, what the PR is doing to it, and which part of that this comment targets.
+
 <details>
   <summary><code>session.ts:88</code> <span class="badge red">grounded</span> cubic-ai: expired sessions crash the handler</summary>
   <ul>
+    <li><strong>Bigger picture:</strong> <code>SessionStore</code> is how every authenticated request looks up who is logged in; this PR makes handlers fetch sessions directly instead of via middleware. The comment is about what happens when the session being fetched has expired.</li>
     <li><strong>Reviewer says:</strong> "SessionStore.get throws on expiry but the caller expects null."</li>
     <li><strong>The code today:</strong> <code>SessionStore.get</code> raises <code>TokenExpiredError</code> (session.ts:88); the caller at handlers.ts:41 only checks for null.</li>
     <li><strong>Verdict:</strong> Grounded - the unhandled error path is real and reachable on any expired session.</li>
