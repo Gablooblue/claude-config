@@ -75,7 +75,8 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 
 | Token | Content |
 |---|---|
-| `{{TITLE}}` | `<repo-key> PR <n>` or `<repo-key> <branch>` |
+| `{{TITLE}}` | what the PR does, 3-7 plain words (e.g. `Resource Viewer storage and delivery`) - NEVER just the repo name and number |
+| `{{SUBTITLE}}` | `<repo-key> - PR <n>` (or branch) `- YYYY-MM-DD` |
 | `{{TLDR_HTML}}` | one lead `<p>` sentence, then a `<ul>` of 2-4 bullets |
 | `{{FLOW_MERMAID}}` | the mermaid source from Step 3.2 |
 | `{{COMPONENT_COUNT}}` | number of component entries |

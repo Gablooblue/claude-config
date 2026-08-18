@@ -38,7 +38,8 @@ dl.card dd{break-inside:avoid}
 nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:1.4rem;padding:.6rem 1.5rem;font-size:.72rem;z-index:9;overflow-x:auto;text-transform:uppercase;letter-spacing:.06em;font-variant-numeric:tabular-nums}
 nav a{color:var(--muted);text-decoration:none;white-space:nowrap;font-weight:600}
 nav a strong{color:var(--ink);font-weight:700}
-h1{font-size:1.4rem;font-weight:600;letter-spacing:-.01em;margin:1.6rem 0 .3rem}
+h1{font-size:1.4rem;font-weight:600;letter-spacing:-.01em;margin:1.6rem 0 .1rem}
+.sub{color:var(--muted);font-size:.8rem;margin:0;font-variant-numeric:tabular-nums;text-transform:uppercase;letter-spacing:.05em}
 h2{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:2.4rem 0 .6rem;border-bottom:1px solid var(--line);padding-bottom:.45rem}
 .card{background:transparent;border:0;border-radius:0;padding:0}
 #tldr h2{color:var(--accent);border-color:var(--line)}
@@ -78,6 +79,7 @@ summary:hover{color:var(--accent)}
 </nav>
 <main>
   <h1>{{TITLE}}</h1>
+  <p class="sub">{{SUBTITLE}}</p>
   <section id="tldr">
     <h2>TL;DR</h2>
     <div class="card">{{TLDR_HTML}}</div>
