@@ -7,6 +7,8 @@ description: Map an agent's implementation plan to the actual code it references
 
 An agent proposed a plan; the user cannot judge it because they do not know the code it references. Your job: establish what the referenced code does TODAY, compare that against what the plan claims, and surface where the plan is an assumption rather than a fact. Do not rewrite or improve the plan.
 
+Scope lock: this skill READS the repo and WRITES only the guide file, the scratchpad, and the published page. NEVER modify, fix, or format any file inside the repo, and NEVER start implementing the plan you are explaining.
+
 ## Style rules (hard requirements for every sentence you output)
 
 - Mechanism, never category. NOT "it uses a caching strategy". YES "it holds the result in memory for 60s, so the second call skips the DB".
@@ -69,7 +71,7 @@ Then derive **Questions to ask the agent**: 2-3 concrete challenges from the hig
 
 ## Step 4 - Render the page
 
-Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; change NOTHING else (no restructuring, no CSS edits, no section reordering - consistency across runs is the point).
+Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; change NOTHING else (no restructuring, no CSS edits, no section reordering - consistency across runs is the point). The template IS the page design: do not run design skills or "improve" the page while publishing.
 
 | Token | Content |
 |---|---|

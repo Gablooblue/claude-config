@@ -1,0 +1,101 @@
+<title>{{TITLE}}</title>
+<!-- Fixed template for the explain-plan skill. Fill the double-brace tokens only. Never restructure. -->
+<style>
+:root{
+  --bg:#f6f6f4;--card:#ffffff;--ink:#191919;--muted:#66665f;--line:#e3e3dd;
+  --accent:#2563eb;--accent-soft:#dbeafe;
+  --red:#b91c1c;--red-soft:#fde8e8;--amber:#92400e;--amber-soft:#fdf0d2;
+  --green:#166534;--green-soft:#ddf3e4;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121316;--card:#1c1e22;--ink:#e9e9e6;--muted:#9b9b95;--line:#2b2e34;
+    --accent:#7aa7ff;--accent-soft:#22304d;
+    --red:#f08585;--red-soft:#3c2222;--amber:#e8b45a;--amber-soft:#3a2f16;
+    --green:#7ed09a;--green-soft:#1d3527;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121316;--card:#1c1e22;--ink:#e9e9e6;--muted:#9b9b95;--line:#2b2e34;
+  --accent:#7aa7ff;--accent-soft:#22304d;
+  --red:#f08585;--red-soft:#3c2222;--amber:#e8b45a;--amber-soft:#3a2f16;
+  --green:#7ed09a;--green-soft:#1d3527;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif;margin:0;padding-bottom:4rem}
+main{max-width:40rem;margin:0 auto;padding:0 1rem}
+section{scroll-margin-top:3.25rem}
+h1,h2{text-wrap:balance}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:1rem;padding:.65rem 1rem;font-size:.9rem;z-index:9;overflow-x:auto}
+nav a{color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a strong{color:var(--ink)}
+h1{font-size:1.3rem;margin:1.4rem 0 .2rem}
+h2{font-size:1.15rem;margin:2.2rem 0 .8rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem}
+#tldr h2{color:var(--accent)}
+#tldr p{margin:.3rem 0;font-size:1.05rem}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:.5rem 0;padding:.2rem .9rem}
+details[open]{padding-bottom:.8rem}
+summary{cursor:pointer;padding:.6rem 0;font-weight:600;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.badge{font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:99px;letter-spacing:.02em}
+.badge.red{background:var(--red-soft);color:var(--red)}
+.badge.amber{background:var(--amber-soft);color:var(--amber)}
+.badge.green{background:var(--green-soft);color:var(--green)}
+.badge.new{background:var(--accent-soft);color:var(--accent)}
+code{background:var(--accent-soft);border-radius:4px;padding:.05rem .3rem;font-size:.88em}
+pre.mermaid{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;overflow-x:auto}
+ul{padding-left:1.2rem}
+li{margin:.35rem 0}
+.check{display:flex;gap:.6rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0}
+.check input{margin-top:.25rem}
+.check pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem;overflow-x:auto;margin:.4rem 0 0}
+.copy{float:right;font-size:.75rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:6px;padding:.1rem .5rem;cursor:pointer}
+dl.card dt{font-weight:600;margin-top:.7rem}
+dl.card dd{margin:0;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+summary:hover{color:var(--accent)}
+.copy:hover{color:var(--ink);border-color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type="checkbox"]{accent-color:var(--accent)}
+::selection{background:var(--accent-soft)}
+</style>
+<nav>
+  <a href="#tldr"><strong>TL;DR</strong></a>
+  <a href="#map">Plan-to-code</a>
+  <a href="#risks">Risks ({{RISK_COUNT}})</a>
+  <a href="#questions">Questions</a>
+  <a href="#glossary">Glossary</a>
+</nav>
+<main>
+  <h1>{{TITLE}}</h1>
+  <section id="tldr">
+    <h2>TL;DR</h2>
+    <div class="card">{{TLDR_HTML}}</div>
+  </section>
+  <section id="map">
+    <h2>Plan-to-code map</h2>
+    <pre class="mermaid">{{PLAN_MERMAID}}</pre>
+    {{MAP_ITEMS}}
+  </section>
+  <section id="risks">
+    <h2>Risk flags</h2>
+    {{RISK_ITEMS}}
+  </section>
+  <section id="questions">
+    <h2>Ask the agent before approving</h2>
+    <ol class="card">{{QUESTION_ITEMS}}</ol>
+  </section>
+  <section id="glossary">
+    <h2>Glossary</h2>
+    <dl class="card">{{GLOSSARY_ITEMS}}</dl>
+  </section>
+</main>
+<script>
+document.addEventListener('click',function(e){
+  if(!e.target.classList.contains('copy'))return;
+  var pre=e.target.closest('.check').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(function(){
+    e.target.textContent='copied';setTimeout(function(){e.target.textContent='copy'},1200);
+  });
+});
+</script>

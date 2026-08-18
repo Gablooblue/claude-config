@@ -7,6 +7,8 @@ description: Explain what a PR, branch, or working-tree diff actually does, writ
 
 Explain someone else's change to a reader who has ZERO knowledge of this repo but is a competent engineer. This is understanding, not judgment: do not review, praise, or criticize the code. Explain it.
 
+Scope lock: this skill READS the repo and WRITES only the guide file, the scratchpad, and the published page. NEVER modify, fix, or format any file inside the repo, even if you notice a bug while reading.
+
 ## Style rules (hard requirements for every sentence you output)
 
 - Mechanism, never category. NOT "it uses a caching strategy". YES "it holds the result in memory for 60s, so the second call skips the DB".
@@ -49,6 +51,7 @@ If all are empty: state "No changes found" and STOP.
 ## Step 2 - Deep read
 
 - Read every touched file IN FULL. NEVER explain a hunk in isolation.
+- If the diff exceeds 800 changed lines: fully explain the 10 files with the largest blast radius (auth, money, data, shared utilities first) and give every remaining file a one-line summary in the component list. Say in the TL;DR that you triaged.
 - For every changed or new function/class, grep the repo for its callers. Blast radius = who calls this and what happens to them if it misbehaves.
 - Collect every repo-specific term you had to figure out while reading; they become Glossary entries.
 - Reuse fresh guide entries for context instead of re-deriving known components.
@@ -67,7 +70,7 @@ Produce these five pieces, obeying the style rules:
 
 ## Step 4 - Render the page
 
-Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; change NOTHING else (no restructuring, no CSS edits, no section reordering - consistency across runs is the point).
+Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; change NOTHING else (no restructuring, no CSS edits, no section reordering - consistency across runs is the point). The template IS the page design: do not run design skills or "improve" the page while publishing.
 
 | Token | Content |
 |---|---|
