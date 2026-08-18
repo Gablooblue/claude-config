@@ -42,13 +42,15 @@ summary{cursor:pointer;padding:.6rem 0;font-weight:600;display:flex;gap:.6rem;al
 .badge.amber{background:var(--amber-soft);color:var(--amber)}
 .badge.green{background:var(--green-soft);color:var(--green)}
 .badge.new{background:var(--accent-soft);color:var(--accent)}
-code{background:var(--accent-soft);border-radius:4px;padding:.05rem .3rem;font-size:.88em}
+code{background:var(--accent-soft);border-radius:4px;padding:.05rem .3rem;font-size:.88em;overflow-wrap:anywhere}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem;overflow-x:auto;max-width:100%}
 pre.mermaid{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;overflow-x:auto}
 ul{padding-left:1.2rem}
 li{margin:.35rem 0}
 .check{display:flex;gap:.6rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0}
 .check input{margin-top:.25rem}
-.check pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem;overflow-x:auto;margin:.4rem 0 0}
+.check>div{min-width:0;flex:1}
+.check pre{margin:.4rem 0 0}
 .copy{float:right;font-size:.75rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:6px;padding:.1rem .5rem;cursor:pointer}
 dl.card dt{font-weight:600;margin-top:.7rem}
 dl.card dd{margin:0;color:var(--muted)}

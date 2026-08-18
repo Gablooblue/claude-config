@@ -64,6 +64,7 @@ Produce these five pieces, obeying the style rules:
 2. **Flow diagram**: mermaid `flowchart LR` of the affected path. Unchanged steps get `class ... dim`, new or modified steps get `class ... hot`. Include both classDefs:
    `classDef dim fill:#e5e7eb,stroke:#9ca3af,color:#4b5563` and `classDef hot fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px`.
    If the change has no meaningful flow (pure config, docs), diagram the smallest surrounding process it affects.
+   Mermaid safety - a parse failure shows a blank or broken diagram, so these are MUST rules: wrap EVERY node label in double quotes (`A["fetchUser(id)"]`, including inside shape brackets like `E[("db.query")]`); NEVER put `<`, `>`, or `&` anywhere in the diagram source - the HTML parser eats them before mermaid runs (write `Promise of User`, never `Promise<User>`); node ids must be plain letters and digits only.
 3. **Component breakdown**: one entry per touched file with exactly these four bullets: What it is / Why it exists / What this change does to it / If this change is wrong, what breaks. Assign a severity badge: red (data loss, auth, money, migrations), amber (user-visible behavior), green (internal, low blast radius). Mark newly created files with a NEW badge.
 4. **Check this yourself**: 2-4 concrete manual verifications with exact commands or URLs and the expected observable result. These must come from THIS diff's risks, not a generic checklist.
 5. **Glossary**: every term you glossed, defined in one sentence each.

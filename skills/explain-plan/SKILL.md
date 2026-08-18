@@ -84,6 +84,8 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 | `{{QUESTION_ITEMS}}` | `<li>` per question |
 | `{{GLOSSARY_ITEMS}}` | `<dt>term</dt><dd>definition</dd>` pairs |
 
+Mermaid safety - a parse failure shows a blank or broken diagram, so these are MUST rules: wrap EVERY node label in double quotes (`S1["Step 1: clearCache on logout"]`); NEVER put `<`, `>`, or `&` anywhere in the diagram source - the HTML parser eats them before mermaid runs (write `Promise of User`, never `Promise<User>`); node ids must be plain letters and digits only.
+
 Map item shape:
 
 ```html
