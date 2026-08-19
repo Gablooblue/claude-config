@@ -124,44 +124,9 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 
 # Manual Testing — MANDATORY Before PR Creation
 
-You MUST block PR creation for any feature, bug fix, or UI change until I have manually exercised the change in a running app. Tests passing is NOT sufficient — type checks and unit tests verify code correctness, not feature correctness.
-
-**Trigger**: I ask you to create a PR, push for review, run `gh pr create`, or say "ready to ship/merge/review".
-
-**Required handoff before PR — output this block, then STOP:**
-
-```
-🛑 MANUAL TEST REQUIRED before PR
-
-▶ Lowest-effort run command:
-   [exact command: `npm run dev`, `pnpm start`, single curl, single CLI invocation]
-   [URL/route/endpoint to hit, or exact input to provide]
-
-▶ Golden path (must pass):
-   1. [concrete user action]
-   2. [expected observable result]
-
-▶ Critical risks I introduced — test these explicitly:
-   - [specific edge case from THIS diff, e.g. "empty list state at /dashboard"]
-   - [regression risk: shared component/util I touched + where else it's used]
-   - [boundary: auth/permission/null/error path I changed]
-
-▶ Reply with one of:
-   "tested ✅"  → I create the PR
-   "broken: [what]" → I debug
-   "skip test" → I create the PR but log the skip in the PR description
-```
-
-**Rules for generating the block:**
-- The run command MUST be the single shortest path to exercise THIS change. If the app has a dev server already implied, just give the route. If it's a pure function, give a one-line REPL/curl invocation. NEVER tell me to "run the full test suite" — I already did.
-- Critical risks come from the actual diff, not a generic checklist. Grep for callers of changed functions. Name the specific files/routes at risk.
-- If the change is genuinely untestable manually (pure internal refactor with full test coverage, type-only change, doc-only change): say so explicitly with "MANUAL TEST N/A: [reason]" and proceed. Do NOT use this escape hatch for UI, API, or behavior changes.
-- If I say "skip test", create the PR but add a `## Skipped Manual Test` section to the PR body listing the untested risks.
-
-**NEVER:**
-- Create the PR before I reply "tested ✅" or "skip test"
-- Claim "should work" or "tests pass so it's fine" as a substitute
-- Generate a generic test checklist — risks must reference the actual changed code
+- Trigger: I ask to create a PR, push for review, run `gh pr create`, or say "ready to ship/merge/review".
+- Invoke the `manual-test` skill and follow it fully — it produces the handoff block and defines the N/A escape hatch.
+- NEVER run `gh pr create` until I reply "tested ✅" or "skip test" ("skip test" → add a `## Skipped Manual Test` section to the PR body).
 
 # Commits
 
