@@ -83,6 +83,15 @@ Multiple agents may be editing this repo at the same time. Treat any uncommitted
 - NEVER run repo-wide formatters, autofix linters, or codemods without checking `git status` first. A blanket rewrite will clobber every other agent's diff.
 - Before staging, re-run `git status` and `git diff --staged`. Stage only the files you modified. If you cannot tell who owns a change, leave it unstaged and flag it.
 
+# Worktrees & Isolated Workspaces — NEVER Create Them
+
+Standing preference. This is my permanent answer to any worktree or isolated-workspace consent question (e.g. superpowers:using-git-worktrees Step 0): NO.
+
+- ALWAYS work in place: the existing checkout, on the currently checked-out branch (HEAD).
+- NEVER create a copy of this project to work in — no `git worktree add`, no `EnterWorktree` tool, no `isolation: "worktree"` agent/workflow options, no `/worktree` commands or `--worktree` flags, no cloning the repo into another directory, no `.worktrees/` or `worktrees/` directories.
+- If the working tree is dirty or the branch looks wrong, resolve it in place (see Concurrent Agents) or ask me. NEVER route around it with an isolated copy.
+- If a skill or plan lists worktree setup as a required step, skip that step and state: "Working in place per declared worktree preference."
+
 # Anti-Patterns — Flag and REFUSE to Implement Without Discussion
 
 - God classes/functions that do too many things
