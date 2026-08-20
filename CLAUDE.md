@@ -83,14 +83,15 @@ Multiple agents may be editing this repo at the same time. Treat any uncommitted
 - NEVER run repo-wide formatters, autofix linters, or codemods without checking `git status` first. A blanket rewrite will clobber every other agent's diff.
 - Before staging, re-run `git status` and `git diff --staged`. Stage only the files you modified. If you cannot tell who owns a change, leave it unstaged and flag it.
 
-# Worktrees & Isolated Workspaces — NEVER Create Them
+# Isolated Workspaces — Worktrees YES, Clones NO
 
-Standing preference. This is my permanent answer to any worktree or isolated-workspace consent question (e.g. superpowers:using-git-worktrees Step 0): NO.
+Standing preference. This answers any worktree-consent question (e.g. superpowers:using-git-worktrees Step 0): yes to worktrees, never clones.
 
-- ALWAYS work in place: the existing checkout, on the currently checked-out branch (HEAD).
-- NEVER create a copy of this project to work in — no `git worktree add`, no `EnterWorktree` tool, no `isolation: "worktree"` agent/workflow options, no `/worktree` commands or `--worktree` flags, no cloning the repo into another directory, no `.worktrees/` or `worktrees/` directories.
-- If the working tree is dirty or the branch looks wrong, resolve it in place (see Concurrent Agents) or ask me. NEVER route around it with an isolated copy.
-- If a skill or plan lists worktree setup as a required step, skip that step and state: "Working in place per declared worktree preference."
+- Default to working in place on the current branch. Create an isolated workspace only when the task genuinely needs a different branch than the one checked out (PR comment resolution, stack repair, spikes against another branch).
+- When isolation is needed: use the native worktree tool if one exists (`EnterWorktree`, `/worktree`), else `git worktree add .worktrees/<branch>` (gitignored). A worktree shares the git object store, so it costs MBs, not GBs.
+- NEVER `git clone` this project into a subdirectory. A clone duplicates ~9GB of git objects + node_modules and is invisible to `git worktree list`, so it never gets cleaned up.
+- `.context/` is for plans, specs, spike scripts, and scratch docs ONLY. NEVER put a repo checkout, clone, or worktree inside `.context/`.
+- When the task ends: `git worktree remove <path>` after confirming no unpushed commits or uncommitted changes remain in it.
 
 # Anti-Patterns — Flag and REFUSE to Implement Without Discussion
 
