@@ -45,7 +45,7 @@ Checkpoint — output the list before proceeding:
 
 ## Step 3 — Script and Run the Scriptable Paths
 
-For each `script` or `both` path, write a throwaway script in `<repo root>/.manual-test/` (create the directory) named `NN-what-it-checks.sh` or `.js`, then RUN it.
+For each `script` or `both` path, write a throwaway script in `<repo root>/.context/manual-test/` (create the directory) named `NN-what-it-checks.sh` or `.js`, then RUN it. `.context/` is the repo's uncommitted scratch area — NEVER place these scripts at the repo root or anywhere that would show up in the PR diff.
 
 - Scripts must be self-contained: start what they need (pick a free port, never assume one), seed their own data, print the evidence, clean up after themselves.
 - Result per script is binary: `PASS` or `FAIL`, plus one line of evidence (status code + body, exit code, output diff, screenshot path). NEVER "looks like it works".
@@ -63,7 +63,7 @@ Output this block, then STOP. Every section is required; write "none" rather tha
    - [path] → PASS — [one-line evidence]
 
 ▶ Scripts you can re-run:
-   - .manual-test/NN-name.sh — [what it checks]
+   - .context/manual-test/NN-name.sh — [what it checks]
 
 ▶ Lowest-effort run command:
    [exact command + URL/route/input — the single shortest path to exercise THIS change; never "run the full test suite"]
@@ -86,6 +86,6 @@ Every risk and path must name a specific file, route, or command from THIS diff 
 ## Forbidden Actions
 
 - NEVER modify production code — scripts only
-- NEVER `git add` anything under `.manual-test/`, and NEVER add it to .gitignore
+- NEVER `git add` anything under `.context/`, and NEVER edit .gitignore
 - NEVER claim PASS for a script you did not run this session
 - NEVER create the PR before the human replies "tested ✅" or "skip test"
