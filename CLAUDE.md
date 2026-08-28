@@ -138,6 +138,10 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 - Invoke the `manual-test` skill and follow it fully — it produces the handoff block and defines the N/A escape hatch.
 - NEVER run `gh pr create` until I reply "tested ✅" or "skip test" ("skip test" → add a `## Skipped Manual Test` section to the PR body).
 
+# Package Manager
+
+- We use bun now, not yarn: `bun install`, `bun run <script>`, `bunx`. NEVER run `yarn` commands.
+
 # Commits
 
 - Follow conventional commit format with ticket number: `fix(ABC-1234): Prevent bug from happening`
