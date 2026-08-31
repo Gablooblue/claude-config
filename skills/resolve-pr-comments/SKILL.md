@@ -1,20 +1,21 @@
 ---
 name: resolve-pr-comments
-description: Fetch PR review comments, implement fixes, reply to each comment, push, and request re-review.
+description: Fetch PR review comments, implement fixes, reply to each comment, and push.
 ---
 
 # Resolve PR Comments
 
-Fetch review comments from a GitHub PR, plan fixes for each, implement after approval, reply to every comment, push, and request re-review from all reviewers.
+Fetch review comments from a GitHub PR, plan fixes for each, implement after approval, reply to every comment, and push.
 
 ## Mandatory End State
 
-Every run MUST end with all three of these completed:
+Every run MUST end with both of these completed:
 1. **Push** — all changes pushed to the remote branch
 2. **Reply** — every comment has a reply explaining what was done (or why it was skipped)
-3. **Re-review** — re-review requested from every unique comment author
 
-NEVER skip any of these steps. NEVER push without replying first. NEVER finish without requesting re-review.
+NEVER skip either of these steps. NEVER push without replying first.
+
+Re-review is NOT part of the end state. NEVER run `gh pr edit --add-reviewer` unless the user explicitly asks for it (see Step 7).
 
 ---
 
@@ -52,7 +53,7 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews --paginate
 ```
 
 For each comment, extract:
-- `author` (GitHub handle — collect unique handles for re-review in Step 7)
+- `author` (GitHub handle — collect unique handles for the re-review command offered in Step 7)
 - `body` (the comment text)
 - `path` + `line` (file and line for inline comments)
 - `id` (needed to reply in Step 6)
@@ -128,15 +129,17 @@ git push
 
 ✅ Checkpoint: "Pushed to remote"
 
-## Step 7: Request re-review
+## Step 7: Offer re-review (do NOT run it)
 
-MUST request re-review from every unique comment author collected in Step 2:
+NEVER request re-review automatically. In the final summary, offer it as a ready-to-run command using the unique comment authors collected in Step 2:
 
 ```bash
 gh pr edit {number} --add-reviewer {reviewer1},{reviewer2},...
 ```
 
-✅ Checkpoint: "Re-review requested from {reviewers}"
+Only run this command if the user explicitly says to (e.g. "request re-review", "yes, re-request").
+
+✅ Checkpoint: "Re-review command offered — not executed"
 
 ## Summary
 
@@ -144,5 +147,5 @@ After all steps, output a final summary:
 - Comments addressed: {N}
 - Comments skipped (with reasons): {N}
 - Commits created: list each with hash and message
-- Reviewers notified: {list}
 - PR link
+- Re-review command (from Step 7), ready for the user to approve or run themselves
