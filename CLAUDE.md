@@ -163,7 +163,6 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 # PR Reviews — Receiving
 
 - When pushing changes from review comments, reply to each comment with what was changed.
-- After resolving all comments from a reviewer, request re-review: `gh pr edit --add-reviewer <reviewer>`
 
 # Prompt Artifacts
 
