@@ -15,8 +15,6 @@ Every run MUST end with both of these completed:
 
 NEVER skip either of these steps. NEVER push without replying first.
 
-Re-review is NOT part of the end state. NEVER run `gh pr edit --add-reviewer` unless the user explicitly asks for it (see Step 7).
-
 ---
 
 ## Stop Conditions
@@ -53,7 +51,7 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews --paginate
 ```
 
 For each comment, extract:
-- `author` (GitHub handle — collect unique handles for the re-review command offered in Step 7)
+- `author` (GitHub handle)
 - `body` (the comment text)
 - `path` + `line` (file and line for inline comments)
 - `id` (needed to reply in Step 6)
@@ -129,18 +127,6 @@ git push
 
 ✅ Checkpoint: "Pushed to remote"
 
-## Step 7: Offer re-review (do NOT run it)
-
-NEVER request re-review automatically. In the final summary, offer it as a ready-to-run command using the unique comment authors collected in Step 2:
-
-```bash
-gh pr edit {number} --add-reviewer {reviewer1},{reviewer2},...
-```
-
-Only run this command if the user explicitly says to (e.g. "request re-review", "yes, re-request").
-
-✅ Checkpoint: "Re-review command offered — not executed"
-
 ## Summary
 
 After all steps, output a final summary:
@@ -148,4 +134,3 @@ After all steps, output a final summary:
 - Comments skipped (with reasons): {N}
 - Commits created: list each with hash and message
 - PR link
-- Re-review command (from Step 7), ready for the user to approve or run themselves
