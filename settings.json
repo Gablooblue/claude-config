@@ -1,6 +1,105 @@
 {
+  "effortLevel": "high",
+  "enabledPlugins": {
+    "agent-md-refactor@agent-toolkit": true,
+    "atlassian@claude-plugins-official": true,
+    "datadog-cli@agent-toolkit": true,
+    "dependency-updater@agent-toolkit": true,
+    "double-shot-latte@superpowers-marketplace": true,
+    "elements-of-style@superpowers-marketplace": true,
+    "episodic-memory@superpowers-marketplace": false,
+    "humanizer@agent-toolkit": true,
+    "impeccable@impeccable": true,
+    "jdtls-lsp@claude-plugins-official": true,
+    "lesson-learned@agent-toolkit": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "requirements-clarity@agent-toolkit": true,
+    "skill-judge@agent-toolkit": true,
+    "superpowers@superpowers-marketplace": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
   "env": {
     "ENABLE_LSP_TOOL": "1"
+  },
+  "extraKnownMarketplaces": {
+    "agent-toolkit": {
+      "autoUpdate": true,
+      "source": {
+        "repo": "softaworks/agent-toolkit",
+        "source": "github"
+      }
+    },
+    "caveman": {
+      "source": {
+        "repo": "JuliusBrussee/caveman",
+        "source": "github"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "repo": "anthropics/claude-plugins-official",
+        "source": "github"
+      }
+    },
+    "impeccable": {
+      "source": {
+        "repo": "pbakaus/impeccable",
+        "source": "github"
+      }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "repo": "obra/superpowers-marketplace",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; { git -C \"$repo\" add -A && { git -C \"$repo\" diff --quiet --cached || { git -C \"$repo\" commit -qm \"sync: auto from $(hostname)\" && git -C \"$repo\" push -q origin HEAD; }; }; } >/dev/null 2>&1 || true; fi",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; (git -C \"$repo\" pull --rebase --autostash --quiet >/dev/null 2>&1 || true) & fi",
+            "type": "command"
+          }
+        ],
+        "matcher": "startup|resume"
+      }
+    ]
   },
   "permissions": {
     "allow": [
@@ -10,82 +109,5 @@
       "Bash(gh pr diff:*)"
     ]
   },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; (git -C \"$repo\" pull --rebase --autostash --quiet >/dev/null 2>&1 || true) & fi"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; { git -C \"$repo\" add -A && { git -C \"$repo\" diff --quiet --cached || { git -C \"$repo\" commit -qm \"sync: auto from $(hostname)\" && git -C \"$repo\" push -q origin HEAD; }; }; } >/dev/null 2>&1 || true; fi"
-          }
-        ]
-      }
-    ]
-  },
-  "enabledPlugins": {
-    "pyright-lsp@claude-plugins-official": true,
-    "jdtls-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "superpowers@superpowers-marketplace": true,
-    "episodic-memory@superpowers-marketplace": false,
-    "double-shot-latte@superpowers-marketplace": true,
-    "elements-of-style@superpowers-marketplace": true,
-    "atlassian@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "agent-md-refactor@agent-toolkit": true,
-    "skill-judge@agent-toolkit": true,
-    "dependency-updater@agent-toolkit": true,
-    "lesson-learned@agent-toolkit": true,
-    "requirements-clarity@agent-toolkit": true,
-    "datadog-cli@agent-toolkit": true,
-    "humanizer@agent-toolkit": true,
-    "impeccable@impeccable": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "agent-toolkit": {
-      "source": {
-        "source": "github",
-        "repo": "softaworks/agent-toolkit"
-      },
-      "autoUpdate": true
-    },
-    "superpowers-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers-marketplace"
-      }
-    },
-    "impeccable": {
-      "source": {
-        "source": "github",
-        "repo": "pbakaus/impeccable"
-      }
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    }
-  },
-  "effortLevel": "high",
   "skipWorkflowUsageWarning": true
 }
