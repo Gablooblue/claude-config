@@ -28,7 +28,7 @@ Run both, stop at the first with content:
 
 State the mode and the evidence in one line: `AUDIT MODE — 7 files changed in git diff main...HEAD`. The user can override.
 
-If the diff touches more than roughly 40 files, or spans work that is clearly several unrelated changes, STOP and ask which slice to plan telemetry for. A 60-row table covering four features is not a plan; nobody reads it.
+Then check coherence, not size: is this diff one feature? Skim the changed paths and the commit subjects. If it is several unrelated changes sharing a branch, STOP and ask which one to plan telemetry for. Size alone is never the trigger — a 60-file single feature plans fine, a 6-file diff spanning three tickets does not.
 
 ## Step 1 — The claim
 
@@ -78,6 +78,8 @@ Rules:
 - Name a real `file:line` from this repo in every row. A row you cannot anchor to code is speculation — drop it.
 
 **Checkpoint: output the table before proposing any signal.**
+
+If the table runs past ~25 rows, stop there and ask which area to keep before proposing a single signal. That is the real limit — a plan nobody reads is worth the same as no plan — and you can only measure it after enumerating, which is why the check lives here and not in Step 0.
 
 ## Step 4 — Propose signals
 
