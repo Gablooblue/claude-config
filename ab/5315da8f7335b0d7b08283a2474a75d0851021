@@ -1,0 +1,26 @@
+skills/telemetry-brainstorm/SKILL.md
+  s_8ed3be19fd6bcf::t_5464d6ec5febce 17-18,30-31,115-116,160-161
+  s_8ed3be19fd6bcf::t_b8364bc206bf26 1-16,19-29,32-114,117-159,162-170
+skills/telemetry-brainstorm/references/failure-taxonomy.md
+  s_8ed3be19fd6bcf::t_b8364bc206bf26 1-90
+skills/telemetry-brainstorm/references/stack-idioms.md
+  s_8ed3be19fd6bcf::t_b8364bc206bf26 1-88
+skills/telemetry-brainstorm/templates/telemetry-plan.md
+  s_8ed3be19fd6bcf::t_b8364bc206bf26 1-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "ab5315da8f7335b0d7b08283a2474a75d0851021",
+  "prompts": {},
+  "sessions": {
+    "s_8ed3be19fd6bcf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91a29d38-64b3-4a99-a3f6-1ea43c4113f4",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Gab Lopez <gab@mutinyhq.com>"
+    }
+  }
+}
