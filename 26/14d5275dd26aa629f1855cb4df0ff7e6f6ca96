@@ -1,0 +1,19 @@
+settings.json
+  s_e7fc522a652ba2::t_c3679b5381f631 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "2614d5275dd26aa629f1855cb4df0ff7e6f6ca96",
+  "prompts": {},
+  "sessions": {
+    "s_e7fc522a652ba2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cbb06b2e-273a-4f1c-8124-a87cbae0b0e6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Gab Lopez <gab@mutinyhq.com>"
+    }
+  }
+}
