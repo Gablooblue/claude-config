@@ -5,7 +5,7 @@
     "atlassian@claude-plugins-official": true,
     "datadog-cli@agent-toolkit": true,
     "dependency-updater@agent-toolkit": true,
-    "double-shot-latte@superpowers-marketplace": true,
+    "double-shot-latte@superpowers-marketplace": false,
     "elements-of-style@superpowers-marketplace": true,
     "episodic-memory@superpowers-marketplace": false,
     "humanizer@agent-toolkit": true,
