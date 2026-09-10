@@ -1,6 +1,6 @@
 ---
 name: explain-pr
-description: Explain what a PR, branch, or working-tree diff actually does, written for a reader who barely knows the repo. Produces a visual HTML page (process map, component breakdown, design decisions worth a closer look, glossary with hover tooltips) and updates the per-repo orientation guide. Use when the user asks "what does this PR do", wants a diff or agent-written change explained, or invokes /explain-pr.
+description: Explain what a PR, branch, or working-tree diff actually does, written for a reader who barely knows the repo. Produces a visual HTML page (process map, change-by-change mechanism walkthroughs with real code, decision records, glossary with hover tooltips) and updates the per-repo orientation guide. Use when the user asks "what does this PR do", wants a diff or agent-written change explained, or invokes /explain-pr.
 ---
 
 # Explain PR
@@ -51,7 +51,7 @@ If all are empty: state "No changes found" and STOP.
 ## Step 2 - Deep read
 
 - Read every touched file IN FULL. NEVER explain a hunk in isolation.
-- If the diff exceeds 800 changed lines: fully explain the 10 files with the largest blast radius (auth, money, data, shared utilities first) and give every remaining file a one-line summary in the component list. Say in the TL;DR that you triaged.
+- If the diff exceeds 800 changed lines: walk the mechanisms of the highest-blast-radius changes fully (auth, money, data, shared utilities first) and cover the rest with shorter walkthroughs and no code excerpts. Say in the TL;DR that you triaged.
 - For every changed or new function/class, grep the repo for its callers. Blast radius = who calls this and what happens to them if it misbehaves.
 - Collect every repo-specific term you had to figure out while reading; they become Glossary entries.
 - Reuse fresh guide entries for context instead of re-deriving known components.
@@ -65,8 +65,12 @@ Produce these five pieces, obeying the style rules:
    `classDef dim fill:#e5e7eb,stroke:#9ca3af,color:#4b5563` and `classDef hot fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px`.
    If the change has no meaningful flow (pure config, docs), diagram the smallest surrounding process it affects.
    Mermaid safety - a parse failure shows a blank or broken diagram, so these are MUST rules: wrap EVERY node label in double quotes (`A["fetchUser(id)"]`, including inside shape brackets like `E[("db.query")]`); NEVER put `<`, `>`, or `&` anywhere in the diagram source - the HTML parser eats them before mermaid runs (write `Promise of User`, never `Promise<User>`); node ids must be plain letters and digits only.
-3. **Component breakdown**: one entry per touched file with exactly these four bullets: What it is / Why it exists / What this change does to it / If this change is wrong, what breaks. Assign a severity badge: red (data loss, auth, money, migrations), amber (user-visible behavior), green (internal, low blast radius). Mark newly created files with a NEW badge.
-4. **Worth a closer look**: 2-4 items naming the biggest design decisions or tradeoffs this diff makes - the places a reviewer should actually spend time. Each item: what was decided, why it matters, and exactly where to look (file and function). These must come from THIS diff, not a generic checklist. Severity badge by consequence-if-wrong: red, amber, or green.
+3. **The changes**: group the WHOLE diff into 2-5 coherent changes. A change is one thing the PR does that fits in a sentence ("adds rate limiting to the users API") and usually spans several files - never organize by file. Every hunk belongs to exactly one change; fold mechanical hunks (requires, wiring, renames) into the change that needed them. Per change:
+   - A behavior-named title, a one-line gist, and a severity badge: red (data loss, auth, money, migrations), amber (user-visible behavior), green (internal). Add a NEW badge when the capability did not exist before.
+   - The mechanism as control flow with real names and values: what happens now when this code runs, and what happened before wherever the difference matters. This is the heart of the page - concrete narrative, not summary.
+   - 1-3 verbatim code excerpts, max 10 lines each, each opening with a `// file:line` comment line. Pick the lines that carry the mechanism, never boilerplate.
+   - One closing line listing every file this change touches.
+4. **Decisions**: 2-4 decision records for the choices in this diff that a competent engineer could have made differently. Per decision: **Chose** X **over** Y (always name the rejected alternative - a decision is only visible next to what it beat) / **You gain** / **You pay** / **Breaks down when** (the concrete condition that makes this choice wrong) / **Sit with this** (one pointed question that tests the decision against THIS system's reality). These must come from THIS diff, not a generic checklist.
 5. **Glossary**: every term you glossed, defined in one sentence each. The page turns every mention of a glossary term into a hover tooltip automatically, so keep each definition a single self-contained sentence.
 
 ## Step 4 - Render the page
@@ -79,35 +83,37 @@ Read `template.html` from this skill's directory. Replace every `{{TOKEN}}`; cha
 | `{{SUBTITLE}}` | `<repo-key> - PR <n>` (or branch) `- YYYY-MM-DD` |
 | `{{TLDR_HTML}}` | one lead `<p>` sentence, then a `<ul>` of 2-4 bullets |
 | `{{FLOW_MERMAID}}` | the mermaid source from Step 3.2 |
-| `{{COMPONENT_COUNT}}` | number of component entries |
-| `{{COMPONENT_ITEMS}}` | one `<details>` block per file, shape below |
-| `{{HOTSPOT_COUNT}}` | number of closer-look items |
-| `{{HOTSPOT_ITEMS}}` | one `<details>` block per item, shape below |
+| `{{CHANGE_COUNT}}` | number of change entries |
+| `{{CHANGE_ITEMS}}` | one `<details>` block per change, shape below |
+| `{{DECISION_COUNT}}` | number of decision records |
+| `{{DECISION_ITEMS}}` | one `<details>` block per decision, shape below |
 | `{{GLOSSARY_ITEMS}}` | `<dt>term</dt><dd>definition</dd>` pairs |
 
-Component `<details>` shape:
+Change `<details>` shape (prose paragraphs, then excerpts, then the file list):
 
 ```html
 <details>
-  <summary><code>src/middleware/rate_limiter.ts</code> <span class="badge new">NEW</span> <span class="badge amber">medium</span> counts requests per IP</summary>
-  <ul>
-    <li><strong>What it is:</strong> ...</li>
-    <li><strong>Why it exists:</strong> ...</li>
-    <li><strong>What this change does:</strong> ...</li>
-    <li><strong>If this is wrong:</strong> ...</li>
-  </ul>
+  <summary><strong>Rate limiting on /api/users</strong> <span class="badge new">NEW</span> <span class="badge amber">medium</span> 20 req/min per IP, then HTTP 429</summary>
+  <p>Every request to <code>/api/users</code> now runs through <code>RateLimiter.check</code> before the handler. <code>bucketFor(req.ip)</code> returns a counter that resets every 60 seconds; past 20 hits the middleware answers 429 and the handler never runs.</p>
+  <p>Before this PR nothing counted requests - any client could call the endpoint in a loop.</p>
+  <pre>// src/middleware/rate_limiter.ts:12
+const hits = bucketFor(req.ip).increment()
+if (hits > LIMIT) return res.status(429).send("slow down")</pre>
+  <p class="files">Files: <code>src/middleware/rate_limiter.ts</code>, <code>src/api/users.ts</code>, <code>src/config.ts</code></p>
 </details>
 ```
 
-Closer-look item shape:
+Decision record shape ("Sit with this" always last, always `class="sit"`):
 
 ```html
 <details>
-  <summary><strong>Rate limiting counts per IP, not per user</strong> <span class="badge amber">tradeoff</span></summary>
+  <summary><strong>Limiter keys on IP, not user</strong> <span class="badge amber">decision</span></summary>
   <ul>
-    <li><strong>What was decided:</strong> The limiter keys on request IP, so all users behind one office NAT share a budget.</li>
-    <li><strong>Why it matters:</strong> A large customer on one egress IP can lock themselves out under normal use.</li>
-    <li><strong>Where to look:</strong> <code>rate_limiter.ts</code>, the key expression in <code>bucketFor()</code>.</li>
+    <li><strong>Chose:</strong> keying the limiter on <code>req.ip</code> over the session's user id.</li>
+    <li><strong>You gain:</strong> unauthenticated routes are covered, and no session lookup runs per request.</li>
+    <li><strong>You pay:</strong> everyone behind one office NAT shares a single 20 req/min budget.</li>
+    <li><strong>Breaks down when:</strong> a big customer's whole office egresses one IP and legitimately exceeds the limit.</li>
+    <li class="sit"><strong>Sit with this:</strong> do our largest customers hit this API from shared corporate IPs today?</li>
   </ul>
 </details>
 ```

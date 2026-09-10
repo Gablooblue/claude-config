@@ -25,12 +25,14 @@ body{background:var(--bg);color:var(--ink);font:15px/1.55 "Avenir Next",ui-sans-
 main{max-width:72rem;margin:0 auto;padding:0 1.5rem}
 section{scroll-margin-top:3.5rem}
 h1,h2{text-wrap:balance}
-#components,#hotspots,#map,#risks,#comments,#calls{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(23rem,100%),1fr));gap:0 2.5rem;align-items:start}
-#components h2,#hotspots h2,#map h2,#risks h2,#comments h2,#calls h2{grid-column:1/-1;margin-bottom:0;border-bottom:0;padding-bottom:.2rem}
+#changes,#decisions,#map,#risks,#comments,#calls{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(23rem,100%),1fr));gap:0 2.5rem;align-items:start}
+#changes h2,#decisions h2,#map h2,#risks h2,#comments h2,#calls h2{grid-column:1/-1;margin-bottom:0;border-bottom:0;padding-bottom:.2rem}
 #map pre.mermaid{grid-column:1/-1}
-#components details,#map details,#risks details,#hotspots details,#comments details,#calls details{margin:0}
+#changes details,#decisions details,#map details,#risks details,#comments details,#calls details{margin:0}
 details[open]{grid-column:1/-1}
-details ul{max-width:80ch}
+details ul,details p{max-width:80ch}
+.files{color:var(--muted);font-size:.82rem}
+li.sit,li.sit strong{color:var(--accent)}
 #glossary dl.card{columns:2 24rem;column-gap:3rem}
 dl.card dt{break-inside:avoid;break-after:avoid}
 dl.card dd{break-inside:avoid}
@@ -76,8 +78,8 @@ summary:hover{color:var(--accent)}
 <nav>
   <a href="#tldr"><strong>TL;DR</strong></a>
   <a href="#flow">Flow</a>
-  <a href="#components">Components ({{COMPONENT_COUNT}})</a>
-  <a href="#hotspots">Closer look ({{HOTSPOT_COUNT}})</a>
+  <a href="#changes">Changes ({{CHANGE_COUNT}})</a>
+  <a href="#decisions">Decisions ({{DECISION_COUNT}})</a>
   <a href="#glossary">Glossary</a>
 </nav>
 <main>
@@ -91,13 +93,13 @@ summary:hover{color:var(--accent)}
     <h2>What changes in the flow</h2>
     <pre class="mermaid">{{FLOW_MERMAID}}</pre>
   </section>
-  <section id="components">
-    <h2>Touched components</h2>
-    {{COMPONENT_ITEMS}}
+  <section id="changes">
+    <h2>The changes</h2>
+    {{CHANGE_ITEMS}}
   </section>
-  <section id="hotspots">
-    <h2>Worth a closer look</h2>
-    {{HOTSPOT_ITEMS}}
+  <section id="decisions">
+    <h2>Decisions made here</h2>
+    {{DECISION_ITEMS}}
   </section>
   <section id="glossary">
     <h2>Glossary</h2>

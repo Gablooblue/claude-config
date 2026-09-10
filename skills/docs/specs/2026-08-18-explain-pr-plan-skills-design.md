@@ -79,12 +79,14 @@ Rejected alternatives:
   - **TL;DR** - what this PR does, 3 plain sentences.
   - **Process map** - before/after mermaid flow of the affected path,
     with the changed step visually marked.
-  - **Component breakdown** - per touched file: what it is, why it exists,
-    what this change does to it, what breaks if the change is wrong.
-  - **Worth a closer look** - 2-4 items naming the diff's biggest design
-    decisions/tradeoffs and exactly where to scrutinize them (revised
-    2026-08-18: replaced the original check-this-yourself section at Gab's
-    request).
+  - **The changes** (revised 2026-09-10, replacing the per-file component
+    breakdown at Gab's request: file-slicing read as noise) - 2-5 coherent
+    changes, each a mechanism walkthrough with 1-3 verbatim code excerpts
+    and a closing file list.
+  - **Decisions** (revised 2026-09-10, reshaped from "Worth a closer look")
+    - 2-4 decision records: Chose X over Y / You gain / You pay / Breaks
+    down when / Sit with this (a pointed question). Replaced the original
+    check-this-yourself section 2026-08-18.
   - **Glossary** - terms used above, glossed. Every mention of a glossary
     term in the page body gets a hover tooltip with its definition
     (template JS, driven by the glossary dl).
