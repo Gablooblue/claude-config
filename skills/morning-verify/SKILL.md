@@ -77,6 +77,7 @@ Verdict rules, apply in order, first match wins:
 Zero errors from 7 users proves nothing: that is NEEDS YOU, not VERIFIED. Count only users/requests that hit the CHANGED code, never a broad match.
 
 Return exactly:
+SUMMARY: <what this PR changed, as the user would notice it, max 10 words, no ticket IDs or jargon; e.g. "Recorder waits for meetings to end before updating">
 VERDICT: ALARM | NEEDS YOU | VERIFIED
 RULE: <which numbered rule matched, and the number that triggered it>
 AFTER_VOLUME: <distinct users or requests on the changed code since live>
@@ -90,32 +91,32 @@ FOLLOW-UPS: <promised but not done, or "none">
 Subagents drift from the rules. Before reporting, re-apply the verdict rules above to each result yourself, using its RULE, AFTER_VOLUME, and EVIDENCE:
 - VERIFIED with AFTER_VOLUME under 20, or on a visible UI change: downgrade to NEEDS YOU.
 - VERIFIED whose EVIDENCE shows any rise in errors or failures: upgrade to ALARM.
-- Same anomaly reported by several PRs (e.g. one recorder version misbehaving): keep ALARM only on the PR whose diff touches the failing code; the others say `see #N` and keep their own verdict.
+- Same anomaly reported by several PRs (e.g. one recorder version misbehaving): keep ALARM only on the PR whose diff touches the failing code; the others say `see <SUMMARY of that PR>` and keep their own verdict.
 - A subagent that errored out: NEEDS YOU with `verification failed: <error>`.
 - SKIP (docs-only) and NOT LIVE come from Steps 2-3, not from subagents.
 
 ## Step 5: Report
 
-Count check first: every PR from Step 1 appears exactly once. Then print, in this order, omitting empty groups:
+Count check first: every PR from Step 1 appears exactly once. Every PR line leads with its SUMMARY (write one from the title and diff for NOT LIVE and SKIP PRs), then the ticket ID and a clickable link. NEVER identify a PR by number or title alone: titles repeat across PRs for the same ticket. Then print, in this order, omitting empty groups:
 
 ```
 MORNING VERIFY - <date>  (<n> PRs: <x> not live, <y> alarm, <z> need you, <v> verified, <s> skip)
 
 NOT LIVE
-  #N title - build <b> <state>: <waiting on>
+  <SUMMARY> (<ticket>, [#N](https://github.com/MutinyHQ/mutiny-frontend/pull/N)) - build <b> <state>: <waiting on>
 ALARM
-  #N title - <what is wrong>
+  <SUMMARY> (<ticket>, [#N](https://github.com/MutinyHQ/mutiny-frontend/pull/N)) - <what is wrong>
     evidence: <query -> numbers>
     check: <fastest step to confirm or clear it>
 NEEDS YOU  (fastest first)
-  #N title - <why data can't settle it>
+  <SUMMARY> (<ticket>, [#N](https://github.com/MutinyHQ/mutiny-frontend/pull/N)) - <why data can't settle it>
     check: <exact action> -> expect <result>
 VERIFIED
-  #N title - <one-line evidence>
+  <SUMMARY> (<ticket>, [#N](https://github.com/MutinyHQ/mutiny-frontend/pull/N)) - <one-line evidence>
 SKIP
-  #N title
+  <SUMMARY> (<ticket>, [#N](https://github.com/MutinyHQ/mutiny-frontend/pull/N))
 FOLLOW-UPS
-  #N <promised item not done>
+  <SUMMARY>: <promised item not done>
 
 Next action: <one thing, the top ALARM or NOT LIVE item, else the first NEEDS YOU check>
 ```
