@@ -1,19 +1,23 @@
 ---
-name: figma-state-review
-description: Use when checking built UI against Figma, design mockups, or exported design frames - "compare to Figma", "does this match the design", "walk me through it vs the design", "go through each change one by one", or reviewing visual states, hover/animation frames, or placement rules with the user.
+name: design-state-review
+description: Use when checking built UI against a design reference - Figma frames, mockups, ticket images, screenshots, or a reference site/app - "compare to the design", "does this match the mockup", "compare to Figma", "walk me through it vs the design", "go through each change one by one", or reviewing visual states, hover/animation frames, or placement rules with the user.
 ---
 
-# Figma State Review
+# Design State Review
 
-Walk the user through the built UI **one big change per message**. Each message holds one labelled image (Figma vs the real renderer), what differs, and at most one decision. Then you MUST stop and wait. The user steers; you capture, fix, and recapture.
+Walk the user through the built UI **one big change per message**. Each message holds one labelled image (design vs the real renderer), what differs, and at most one decision. Then you MUST stop and wait. The user steers; you capture, fix, and recapture.
 
 Why one at a time: the user judges visuals by eye. Five images and three questions in one message means they skim, decisions get mixed up, and fixes land untested. One change per message keeps each look, decision, and commit separate.
+
+## The design reference
+
+Whatever the user treats as the target: Figma exports, mockups, images in the ticket (`mcp__linear__extract_images`), screenshots, or a live reference site or app (capture it the same way as the build). If you get a link you can't open, ask the user for an image export. Save each crop as `.context/screens/<ticket>-<change>-design.png`.
 
 ## Message 1: inventory + first change
 
 1. List the big changes in review order, one line each, numbered (e.g. `1. Glow levels  2. Hover pill  3. Call card  4. Tooltip placement  5. Fold animation`).
-   - Figma has it but it isn't built: list it with `(not built)`. It gets its own round with a build-or-skip decision.
-   - Built but no Figma frame exists: list it with `(no frame)` and ask for an export when you reach it.
+   - The design has it but it isn't built: list it with `(not built)`. It gets its own round with a build-or-skip decision.
+   - Built but the design doesn't show it: list it with `(no design)` and ask for a reference when you reach it.
 2. Then do a full round (below) for change 1 only.
 
 ## One round = one change
@@ -25,22 +29,22 @@ Why one at a time: the user judges visuals by eye. Five images and three questio
 
 **Check the capture before trusting it.** Open the PNG and confirm the state actually rendered: hover expanded, card not clipped, the right timer text. If the capture is wrong, fix the harness first and say "that's the harness, not the app".
 
-**Match Figma's scale.** Crop the built shot around the element and zoom it (lanczos) to the size of the Figma crop. When placement is what's being checked, keep the screen edge in the crop.
+**Match the design's scale.** Crop the built shot around the element and zoom it (lanczos) to the size of the design crop. When placement is what's being checked, keep the screen edge in the crop.
 
-**Compose one sheet** with Figma on top and built underneath, each row labelled. Save it as `.context/screens/<ticket>-<change>-compare.png`.
+**Compose one sheet** with the design on top and built underneath, each row labelled. Save it as `.context/screens/<ticket>-<change>-compare.png`.
 
 ```js
 import sharp from 'sharp';
 const W = 528, L = 44;
 const label = (t) => Buffer.from(`<svg width="${W}" height="${L}"><text x="12" y="30" font-size="22" font-family="Helvetica">${t}</text></svg>`);
 const fit = (p, crop) => sharp(p).extract(crop).resize(W, null, { kernel: 'lanczos3' }).png().toBuffer();
-const design = await fit('figma.png', { left: 120, top: 40, width: 400, height: 160 });
+const design = await fit('design.png', { left: 120, top: 40, width: 400, height: 160 });
 const built = await fit('built.png', { left: 388, top: 56, width: 176, height: 72 });
 const h = async (b) => (await sharp(b).metadata()).height;
 const [dh, bh] = [await h(design), await h(built)];
 await sharp({ create: { width: W, height: 2 * L + dh + bh, channels: 4, background: '#f4f4f6' } })
   .composite([
-    { input: label('Figma'), left: 0, top: 0 }, { input: design, left: 0, top: L },
+    { input: label('Design'), left: 0, top: 0 }, { input: design, left: 0, top: L },
     { input: label('Built (real renderer)'), left: 0, top: L + dh }, { input: built, left: 0, top: 2 * L + dh },
   ]).png().toFile('compare.png');
 ```
@@ -50,7 +54,7 @@ await sharp({ create: { width: W, height: 2 * L + dh + bh, channels: 4, backgrou
 ```
 <One line: matches / close / differs, and the single biggest gap.>
 
-![<Change>: Figma vs built](</abs/path/compare.png>)
+![<Change>: design vs built](</abs/path/compare.png>)
 
 **How it works now**
 - <mechanism with real values: 160ms, 44→148pt, #7a24c8, file + function names>
@@ -84,6 +88,6 @@ For animations, capture a frame strip (e.g. every 40-80ms after the trigger) and
 | Two or three decisions at the end | One decision per message. Queue the others for that change's own round. |
 | Listing fixes for every state up front | Offer the fix for the current change only, with yes/no. |
 | Calling a ticket- or copy-driven difference a gap | Check commits/ticket first, then use "Different on purpose". |
-| Mismatched scale (Figma frames are zoomed in) | Crop + zoom the built shot to the Figma crop's size. |
+| Mismatched scale (design frames are often zoomed in) | Crop + zoom the built shot to the design crop's size. |
 | Trusting a capture where hover/state didn't take | Open the PNG, check it, fix the harness first. |
 | Moving to the next change yourself | End with `Next big change: X. Say go.` and stop. |
