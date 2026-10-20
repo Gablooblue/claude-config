@@ -11,7 +11,11 @@ Why one at a time: the user judges visuals by eye. Five images and three questio
 
 ## The design reference
 
-Whatever the user treats as the target: Figma exports, mockups, images in the ticket (`mcp__linear__extract_images`), screenshots, or a live reference site or app (capture it the same way as the build). If you get a link you can't open, ask the user for an image export. Save each crop as `.context/screens/<ticket>-<change>-design.png`.
+Whatever the user treats as the target: Figma exports, mockups, images in the ticket (`mcp__linear__extract_images`), screenshots, or a live reference site or app.
+- Live site or app: capture it the same way as the build. If it needs the user's login, drive their own browser (the Chrome plugin via `node_repl`) or ask for a screenshot.
+- A link you can't open: ask the user for a screenshot or export.
+- More than one reference: give each its own labelled row (`Design (mockup)`, `Reference (Stripe)`). Where they disagree, which one wins is that round's decision.
+- Save each crop as `.context/screens/<ticket-or-slug>-<change>-design.png`.
 
 ## Message 1: inventory + first change
 
@@ -31,7 +35,7 @@ Whatever the user treats as the target: Figma exports, mockups, images in the ti
 
 **Match the design's scale.** Crop the built shot around the element and zoom it (lanczos) to the size of the design crop. When placement is what's being checked, keep the screen edge in the crop.
 
-**Compose one sheet** with the design on top and built underneath, each row labelled. Save it as `.context/screens/<ticket>-<change>-compare.png`.
+**Compose one sheet** with the design on top and built underneath, each row labelled. Save it as `.context/screens/<ticket-or-slug>-<change>-compare.png`.
 
 ```js
 import sharp from 'sharp';
@@ -69,7 +73,7 @@ await sharp({ create: { width: W, height: 2 * L + dh + bh, channels: 4, backgrou
 <OR>     **Fix:** <2-4 bullets naming the CSS/props to change>. Make the change and recapture? Yes or no.
 ```
 
-Before you put anything under "Where it differs", check the branch's commits, the ticket, and any copy branch. Differences that come from those go under "Different on purpose".
+Before you put anything under "Where it differs", check the branch's commits, the ticket (if any), and any copy changes the user pointed to. Differences that come from those go under "Different on purpose".
 
 ## After the user answers
 
