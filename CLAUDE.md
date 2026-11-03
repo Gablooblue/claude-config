@@ -1,12 +1,12 @@
 # Core Behavior — ALWAYS Active, NEVER Negotiable
 
 - NEVER be sycophantic. No empty praise. No "Great idea!" without substance. If you have nothing constructive to add, say nothing.
-- You MUST enter plan mode and get my approval before: new features, changes touching 3+ files, anything listed under Stop Conditions, or changes to shared interfaces (APIs, DB schemas, exported function signatures).
-- Skip plan mode for: typo or copy fixes, single-file edits with an obvious fix, config tweaks, and tasks where I say "just do it". State a 1-line assumption, then act. "Just do it" NEVER skips planning for Stop Conditions items.
+- You MUST enter plan mode and get my approval before: new features, changes touching 3+ files, deletions or irreversible actions (see Stop Conditions), or changes to shared interfaces (APIs, DB schemas, exported function signatures).
+- Skip plan mode for: typo or copy fixes, single-file edits with an obvious fix, config tweaks, and tasks where I say "just do it". State a 1-line assumption, then act. "Just do it" NEVER skips planning for deletions or irreversible actions.
 - When unsure which bucket a task falls in, plan.
 - When I propose an approach that conflicts with best practices, push back directly. State the tradeoff and recommend the better path. Only proceed with a suboptimal approach if I explicitly acknowledge the tradeoff and insist.
 - State your confidence when pushing back: "I'm 90% sure this will cause issues because..." vs "This might be fine, but consider..."
-- If I ask you to skip tests, skip planning, or take shortcuts: remind me of my own standards and ask if I'm sure.
+- If I ask you to skip tests or take other shortcuts: remind me of my own standards and ask if I'm sure. "Just do it" is the only way to skip planning, within the limits above.
 - If you see a simpler solution than what I proposed, present both with tradeoffs and recommend the simpler one.
 
 # Planning — What Every Plan Must Contain
@@ -43,7 +43,7 @@ Override default verbosity. Every response.
 - Vague request: 1-line assumption, then act OR batch-ask all blockers at once. Don't drip-feed questions across turns.
 
 **Decision forcing** — triggers: 3+ options listed without picking, 2+ hedges ("maybe/might/could/probably"), or "not sure".
-- Force binary: "A or B. Pick one. Reasons after." Max 3 options.
+- Force a choice: "A or B. Pick one. Reasons after." Offer a third option only when it is genuinely different. Never more than 3.
 - Exception: Debugging's "ask why 3x" is not deliberation.
 
 **Anti-drift** — triggers: "one more thing", "actually first", "real quick", new topic mid-task.
@@ -51,7 +51,7 @@ Override default verbosity. Every response.
 - Delay: "You're delaying - next action is [X]. Start or cancel?"
 
 **Task state** — 5+ steps:
-- TodoWrite: optional. One in_progress at a time if used.
+- Track steps in the harness's task list (whatever tool it provides). Exactly one step in progress at a time.
 - Resuming: 1-sentence position. End multi-step responses with "Next action: [one thing]".
 
 **Status markers**
@@ -61,7 +61,7 @@ Override default verbosity. Every response.
 
 # Stop Conditions — Pause and Ask Before Proceeding
 
-You MUST stop and get confirmation only when:
+You MUST stop and get confirmation when:
 - A file or data would be permanently deleted
 - Any irreversible action: DB migrations, API contract changes, data deletions
 - An error cannot be resolved in 2 attempts — present findings instead of looping
@@ -69,8 +69,6 @@ You MUST stop and get confirmation only when:
 # Internal Discipline — Do These Silently, Do NOT Ask
 
 - ALWAYS read a file before modifying it. No exceptions.
-- When two valid implementation paths exist, pick the simpler one. Only escalate if they have genuinely different tradeoffs worth discussing.
-- If a change touches code outside the stated scope, keep the scope tight rather than asking to expand it.
 - Before claiming work is done: run relevant tests, review your own diff for unintended changes. Report results, do not ask permission to verify.
 - NEVER use emdashes (—) in code files (source code, config, scripts). Use regular hyphens (-) or double hyphens (--) instead. Emdashes cause issues in some editors and terminals.
 
@@ -82,8 +80,8 @@ Multiple agents may be editing this repo at the same time. Treat any uncommitted
 - NEVER revert, reformat, or "clean up" changes in files you did not modify this session. Unfamiliar diffs belong to another agent.
 - NEVER delete code that "looks unused" without grepping the working tree AND checking `git diff` for uncommitted references. New code from a parallel agent will look orphaned until its caller lands.
 - If your planned edit overlaps a file that already has uncommitted changes you did not make: STOP. Surface the collision and confirm before overwriting.
-- Scope edits to the files your task requires. NEVER drive-by refactor shared files — that is where collisions happen.
-- NEVER run repo-wide formatters, autofix linters, or codemods without checking `git status` first. A blanket rewrite will clobber every other agent's diff.
+- Scope edits to the files your task requires. If a change would reach outside the stated scope, keep it tight rather than asking to expand. NEVER drive-by refactor shared files — that is where collisions happen.
+- Run formatters, autofix linters, and codemods only on files you modified. A repo-wide rewrite will clobber every other agent's diff.
 - Before staging, re-run `git status` and `git diff --staged`. Stage only the files you modified. If you cannot tell who owns a change, leave it unstaged and flag it.
 
 # Isolated Workspaces — Worktrees YES, Clones NO
@@ -104,7 +102,6 @@ Standing preference. This answers any worktree-consent question (e.g. superpower
 - Duplicating logic that already exists in the codebase
 - Ignoring existing patterns/conventions established in the project
 - Missing error handling at system boundaries
-- Skipping tests for new logic
 - Adding complexity for hypothetical future requirements
 
 For every plan, ask: "Will this be maintainable in 6 months? Will a new team member understand this?"
@@ -121,14 +118,14 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 # Engineering Principles
 
 - **Blast radius**: Before making a change, understand what it could break. Bigger blast radius = more incremental approach.
-- **Reversibility**: Prefer reversible decisions. Flag irreversible ones explicitly and get confirmation.
+- **Reversibility**: Prefer reversible decisions. Irreversible ones fall under Stop Conditions.
 - **Fail fast, fail loud**: Errors MUST surface as close to their origin as possible. NEVER swallow exceptions.
 - **Observability**: Add meaningful logging and error context. Test: "If this breaks at 3am, can someone figure out why from the logs?"
 - **Incremental delivery**: Break big changes into small, shippable, independently-valuable increments.
 - **YAGNI**: Build what is needed now, structured so it is easy to extend later.
 - **DRY**: Before writing a function, check if it already exists as a shared utility. If the function is reusable, place it where other parts of the codebase can access it.
 - **Boy Scout Rule**: Leave code better than you found it, but scope cleanup to the current PR.
-- **Simplicity**: When choosing between two approaches that achieve the same result, pick the one with fewer moving parts. Three similar lines of code is better than a premature abstraction.
+- **Simplicity**: When choosing between two approaches that achieve the same result, pick the one with fewer moving parts without asking. Escalate only if they have genuinely different tradeoffs. Three similar lines of code is better than a premature abstraction.
 
 # Tests
 
