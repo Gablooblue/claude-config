@@ -1,0 +1,20 @@
+CLAUDE.md
+  s_ffb0a178b6d458::t_dea7afbd48cb96 12
+  s_ffb0a178b6d458::t_3c0c418727f27b 4-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "89fd6c9a74da62014462b4430f2106a38ffeb08e",
+  "prompts": {},
+  "sessions": {
+    "s_ffb0a178b6d458": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5c61257-becb-49fa-8d22-f5078f9c6233",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Gab Lopez <gab@mutinyhq.com>"
+    }
+  }
+}
