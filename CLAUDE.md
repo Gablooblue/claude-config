@@ -144,6 +144,7 @@ For every plan, ask: "Will this be maintainable in 6 months? Will a new team mem
 
 # Commits
 
+- Commit and push verified work without asking. PRs are squash-merged, so WIP commits are fine. NEVER push to main/master. Force-push only after a rebase, only with `--force-with-lease`, and ask me first.
 - Follow conventional commit format with ticket number: `fix(ABC-1234): Prevent bug from happening`
 - NEVER make a PR without a ticket number in the title
 - NEVER push plan files into the git repo.
