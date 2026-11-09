@@ -26,7 +26,8 @@ This repo mirrors the contents of my `~/.claude/` directory so I can version, sh
     ├── finish-pr/
     ├── prompt-master/
     ├── resolve-merge-conflicts/
-    └── resolve-pr-comments/
+    ├── resolve-pr-comments/
+    └── write-ticket/
 ```
 
 ## Installation
@@ -109,6 +110,7 @@ Skills are domain-specific procedures. Each has a `SKILL.md` with frontmatter de
 - **`prompt-master`** — generates optimized prompts for any AI tool. Tool-aware routing (Claude, GPT-5, o3, Gemini, Qwen, Ollama, Cursor, v0, etc.). Refuses to embed techniques that cause fabrication in single-prompt execution.
 - **`resolve-merge-conflicts`** — autonomously resolves merge/rebase/cherry-pick conflicts using a 3-tier strategy (lockfiles auto-regenerate, config files merge heuristically, code files analyzed with three-way diff). Escalates genuinely ambiguous conflicts in one batch.
 - **`resolve-pr-comments`** — fetches GitHub PR review comments, proposes fixes for all in one pass, implements after approval, replies to every comment, pushes, and requests re-review.
+- **`write-ticket`** — writes Linear tickets for a future agent with zero context. Gathers decisions, constraints, and failed attempts from the session, verifies every code reference (`path:line` + snippet), dedupes, then creates the issue with a human summary on top and a collapsible "Agent notes" section below.
 
 ### `docs/`
 Design specs and reference material I reuse across skills.
