@@ -1,5 +1,60 @@
 {
-  "effortLevel": "high",
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw test:*)",
+      "Bash(xargs cat:*)",
+      "Bash(~/.pr-agent/venv/bin/python -m pr_agent.cli:*)",
+      "Bash(gh pr diff:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; { git -C \"$repo\" add -A && { git -C \"$repo\" diff --quiet --cached || { git -C \"$repo\" commit -qm \"sync: auto from $(hostname)\" && git -C \"$repo\" push -q origin HEAD; }; }; } >/dev/null 2>&1 || true; fi"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; (git -C \"$repo\" pull --rebase --autostash --quiet >/dev/null 2>&1 || true) & fi"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "agent-md-refactor@agent-toolkit": true,
     "atlassian@claude-plugins-official": true,
@@ -20,94 +75,40 @@
     "superpowers@superpowers-marketplace": true,
     "typescript-lsp@claude-plugins-official": true
   },
-  "env": {
-    "ENABLE_LSP_TOOL": "1"
-  },
   "extraKnownMarketplaces": {
     "agent-toolkit": {
-      "autoUpdate": true,
       "source": {
-        "repo": "softaworks/agent-toolkit",
-        "source": "github"
-      }
+        "source": "github",
+        "repo": "softaworks/agent-toolkit"
+      },
+      "autoUpdate": true
     },
     "caveman": {
       "source": {
-        "repo": "JuliusBrussee/caveman",
-        "source": "github"
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
       }
     },
     "claude-plugins-official": {
       "source": {
-        "repo": "anthropics/claude-plugins-official",
-        "source": "github"
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
       }
     },
     "impeccable": {
       "source": {
-        "repo": "pbakaus/impeccable",
-        "source": "github"
+        "source": "github",
+        "repo": "pbakaus/impeccable"
       }
     },
     "superpowers-marketplace": {
       "source": {
-        "repo": "obra/superpowers-marketplace",
-        "source": "github"
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
       }
     }
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin",
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "/Users/gab/.git-ai/bin/git-ai checkpoint claude --hook-input stdin",
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; { git -C \"$repo\" add -A && { git -C \"$repo\" diff --quiet --cached || { git -C \"$repo\" commit -qm \"sync: auto from $(hostname)\" && git -C \"$repo\" push -q origin HEAD; }; }; } >/dev/null 2>&1 || true; fi",
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "cfg=\"$HOME/.claude/CLAUDE.md\"; if [ -L \"$cfg\" ]; then repo=\"$(dirname \"$(readlink -f \"$cfg\")\")\"; (git -C \"$repo\" pull --rebase --autostash --quiet >/dev/null 2>&1 || true) & fi",
-            "type": "command"
-          }
-        ],
-        "matcher": "startup|resume"
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(./mvnw test:*)",
-      "Bash(xargs cat:*)",
-      "Bash(~/.pr-agent/venv/bin/python -m pr_agent.cli:*)",
-      "Bash(gh pr diff:*)"
-    ]
-  },
-  "skipWorkflowUsageWarning": true
+  "effortLevel": "high",
+  "skipWorkflowUsageWarning": true,
+  "skipDangerousModePermissionPrompt": true
 }
