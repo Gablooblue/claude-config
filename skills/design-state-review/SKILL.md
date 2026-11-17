@@ -1,41 +1,63 @@
 ---
 name: design-state-review
-description: Use when checking built UI against a design reference - Figma frames, mockups, ticket images, screenshots, or a reference site/app - "compare to the design", "does this match the mockup", "compare to Figma", "walk me through it vs the design", "go through each change one by one", or reviewing visual states, hover/animation frames, or placement rules with the user.
+description: Use when checking built UI against a design reference - Figma frames, mockups, ticket images, screenshots, or a reference site/app - "compare to the design", "does this match the mockup", "compare to Figma", "walk me through it vs the design", "go through each change", or reviewing visual states, hover/animation frames, or placement rules. Runs unattended and ends with one report of every update.
 ---
 
 # Design State Review
 
-Walk the user through the built UI **one big change per message**. Each message holds one labelled image (design vs the real renderer), what differs, and at most one decision. Then you MUST stop and wait. The user steers; you capture, fix, and recapture.
+Review the built UI against the design **without stopping**: list every big change, then for each one capture, compare, fix, recapture, test, and commit. Send **one report at the end** covering every change. Do NOT message the user between changes, and do NOT ask for a go-ahead, a yes/no, or an A/B pick mid-run.
 
-Why one at a time: the user judges visuals by eye. Five images and three questions in one message means they skim, decisions get mixed up, and fixes land untested. One change per message keeps each look, decision, and commit separate.
+Why unattended: the user wants to judge finished results, not approve each step. What keeps that safe is one commit per change (any single change can be reverted alone) and a final report that shows every image and every choice you made on the user's behalf.
+
+## Rules for the whole run
+
+- **Fix only real gaps.** A real gap is a visual difference between design and built that the ticket, the branch's commits, or an earlier user decision does not explain. Explained differences are "Different on purpose" and stay as they are.
+- **When a fix has two reasonable options, pick the one you would have recommended** and record it as a judgment call with the option you passed over. Never stop to ask.
+- **Park, don't ask.** A change you cannot or should not finish alone goes on the "Needs you" list (below) and the run continues with the next change.
+- **One change, one commit.** Touch only the files that change needs. Run the relevant tests before each commit.
+- **Before the first edit, run `git status` and `git diff`.** If a file a fix needs already has uncommitted changes you did not make, park that change.
+
+### Park a change on "Needs you" when
+
+| Situation | What to record |
+|---|---|
+| The design has it but it isn't built `(not built)` | What is missing. Building it is a new feature, not a fix. |
+| Built but the design doesn't show it `(no design)` | Which state needs a reference. |
+| Two references disagree and the ticket doesn't say which wins | Both versions, and which one you would pick. |
+| The fix would edit a shared component, design token, or style used outside the reviewed UI, or add a dependency | The fix you would make and what else it would affect. |
+| Still differs after 3 fix-and-recapture attempts | What you tried and the remaining gap, with the latest sheet. |
+| The capture harness or the tests still fail after 2 attempts | The exact error. Undo your own uncommitted edits for that change first. |
+| The file has someone else's uncommitted changes | The file name. |
+
+### Stop the whole run and ask only when
+
+- No design reference can be opened at all (see below), or
+- The app or renderer cannot be started for capture after 2 attempts.
 
 ## The design reference
 
 Whatever the user treats as the target: Figma exports, mockups, images in the ticket (`mcp__linear__extract_images`), screenshots, or a live reference site or app.
-- Live site or app: capture it the same way as the build. If it needs the user's login, drive their own browser (the Chrome plugin via `node_repl`) or ask for a screenshot.
-- A link you can't open: ask the user for a screenshot or export.
-- More than one reference: give each its own labelled row (`Design (mockup)`, `Reference (Stripe)`). Where they disagree, which one wins is that round's decision.
+- Live site or app: capture it the same way as the build. If it needs the user's login, drive their own browser (the Chrome plugin via `node_repl`).
+- A link you can't open: park the changes that depend on it. If that leaves no usable reference, stop and ask for a screenshot or export.
+- More than one reference: give each its own labelled row (`Design (mockup)`, `Reference (Stripe)`).
 - Save each crop as `.context/screens/<ticket-or-slug>-<change>-design.png`.
 
-## Message 1: inventory + first change
+## Step 1: inventory
 
-1. List the big changes in review order, one line each, numbered (e.g. `1. Glow levels  2. Hover pill  3. Call card  4. Tooltip placement  5. Fold animation`).
-   - The design has it but it isn't built: list it with `(not built)`. It gets its own round with a build-or-skip decision.
-   - Built but the design doesn't show it: list it with `(no design)` and ask for a reference when you reach it.
-2. Then do a full round (below) for change 1 only.
+List the big changes in review order, one line each, numbered (e.g. `1. Glow levels  2. Hover pill  3. Call card  4. Tooltip placement  5. Fold animation`). Mark `(not built)` and `(no design)` items. Track the list in the task list and work through it top to bottom. Animations are their own change: capture a frame strip (e.g. every 40-80ms after the trigger).
 
-## One round = one change
+## Step 2: one round per change
 
 **Capture the real renderer** with its real CSS and fake state. Never use a mockup or a hand-drawn copy.
 - Web: Playwright against the local app or a Vite page that mounts the real component with a fake API.
 - Electron: a `BrowserWindow` loads the renderer's dev-server URL, a preload fakes the bridge (`window.<api>`), the main process sends states over IPC, and `webContents.capturePage()` saves a PNG per state. Synthetic hover needs `mouseEnter` + `mouseMove`, repeated at a few delays.
 - Write the capture as a re-runnable script under `.context/` so every fix can be recaptured in one command.
 
-**Check the capture before trusting it.** Open the PNG and confirm the state actually rendered: hover expanded, card not clipped, the right timer text. If the capture is wrong, fix the harness first and say "that's the harness, not the app".
+**Check the capture before trusting it.** Open the PNG and confirm the state actually rendered: hover expanded, card not clipped, the right timer text. If the capture is wrong, fix the harness first. A harness problem is never reported as an app gap.
 
 **Match the design's scale.** Crop the built shot around the element and zoom it (lanczos) to the size of the design crop. When placement is what's being checked, keep the screen edge in the crop.
 
-**Compose one sheet** with the design on top and built underneath, each row labelled. Save it as `.context/screens/<ticket-or-slug>-<change>-compare.png`.
+**Compose one sheet** with the design on top and built underneath, each row labelled. Save the first one as `.context/screens/<ticket-or-slug>-<change>-before.png` and the one after your fix as `...-<change>-compare.png`.
 
 ```js
 import sharp from 'sharp';
@@ -53,45 +75,54 @@ await sharp({ create: { width: W, height: 2 * L + dh + bh, channels: 4, backgrou
   ]).png().toFile('compare.png');
 ```
 
-## Report template (fill every slot, in this order)
+**Sort the differences.** Check the branch's commits, the ticket (if any), and any copy changes the user pointed to. Differences those explain are "Different on purpose". The rest are real gaps.
+
+**Fix, recapture, commit.**
+1. No real gaps: record `matches` and go to the next change.
+2. Otherwise apply the fix, recapture with the same script, recompose. Repeat up to 3 attempts, then park it.
+3. Run the relevant tests, commit this change on its own, and note the hash.
+4. Record for the report: before and after sheets, what changed (real values), differences on purpose, judgment calls.
+
+Then start the next change immediately.
+
+## Step 3: the final report (one message, fill every slot, in this order)
 
 ```
-<One line: matches / close / differs, and the single biggest gap.>
+**TL;DR:** <N> changes reviewed: <a> already matched, <b> fixed, <c> need you.
 
+| # | Change | Result | Commit |
+|---|---|---|---|
+| 1 | <name> | matched / fixed / needs you | <hash or -> |
+
+## <#>. <Change> - <result>
 ![<Change>: design vs built](</abs/path/compare.png>)
+- **What changed:** <real values: 160ms, 44→148pt, #7a24c8, file + function names> (or "Nothing, already matched")
+- **Different on purpose:** <difference and what explains it> (or "None")
+- **Judgment call:** <what you picked, what you passed over, why> (omit if none)
 
-**How it works now**
-- <mechanism with real values: 160ms, 44→148pt, #7a24c8, file + function names>
+<repeat for every change, in inventory order>
 
-**Where it differs from the design**
-- <concrete visual difference: rim, padding, weight, size, colour>
+## Needs you
+- <#>. <Change>: <the situation from the park table, and the one thing you need from the user>
 
-**Different on purpose**
-- <difference driven by the ticket, a copy branch, or an earlier user decision> (write "None" if empty)
-
-<EITHER> **One decision:** A (recommended): ... / B: ... Pick A or B.
-<OR>     **Fix:** <2-4 bullets naming the CSS/props to change>. Make the change and recapture? Yes or no.
+## To undo a change
+`git revert <hash>` for that row. Each change is its own commit.
 ```
 
-Before you put anything under "Where it differs", check the branch's commits, the ticket (if any), and any copy changes the user pointed to. Differences that come from those go under "Different on purpose".
+For a fixed change, also link the `-before.png` sheet under the image. Write "None" under "Needs you" if nothing was parked.
 
-## After the user answers
-
-1. Apply only what the user agreed to for this change. Leave other changes' files alone. Recapture with the same script, recompose, and repeat until it matches. Don't show intermediate rounds.
-2. Run the relevant tests, then commit this change on its own.
-3. Report: the updated sheet, **What changed** (real values), deliberate differences that remain, the commit hash, then `Next big change: <name>. Say go.`
-4. If the user rejects a change that's already pushed, revert it with a new commit. Never rewrite history.
-
-For animations, capture a frame strip (e.g. every 40-80ms after the trigger) and treat it as its own change.
+If the user later rejects a change that's already pushed, revert it with a new commit. Never rewrite history.
 
 ## Common mistakes
 
 | Mistake | Fix |
 |---|---|
-| All changes in one message with several images | Inventory line, then one change. The rest waits for "go". |
-| Two or three decisions at the end | One decision per message. Queue the others for that change's own round. |
-| Listing fixes for every state up front | Offer the fix for the current change only, with yes/no. |
+| Pausing after a change to ask "go?" or "yes or no?" | Keep going. The only stops are the two in "Stop the whole run". |
+| Asking the user to pick A or B | Pick the recommended one, log it as a judgment call. |
+| Building a `(not built)` feature to close the gap | Park it under "Needs you". |
+| Fixing several changes in one commit | One change, one commit, so each can be reverted alone. |
+| Looping on a stubborn gap | 3 attempts, then park it with the latest sheet. |
+| Leaving a choice out of the report | Every judgment call and every parked change is listed. |
 | Calling a ticket- or copy-driven difference a gap | Check commits/ticket first, then use "Different on purpose". |
 | Mismatched scale (design frames are often zoomed in) | Crop + zoom the built shot to the design crop's size. |
 | Trusting a capture where hover/state didn't take | Open the PNG, check it, fix the harness first. |
-| Moving to the next change yourself | End with `Next big change: X. Say go.` and stop. |
